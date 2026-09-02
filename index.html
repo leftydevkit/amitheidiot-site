@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>amitheidiot — find out soon</title>
+    <link rel="stylesheet" href="fonts.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ink: #16130e;
+        --paper: #f1ece0;
+        --blood: #ff5a5f;
+        --gold: #e5c158;
+        --aegean: #6c8cff;
+        --dim: rgba(241, 236, 224, 0.55);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--ink);
+        font-family: 'Space Grotesk', sans-serif;
+        color: var(--paper);
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--ink);
+      }
+      .scene {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .paper {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        line-height: 0.95;
+        letter-spacing: 0.01em;
+      }
+      .kicker {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 30px;
+        font-weight: 500;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      .sub {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 34px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: var(--dim);
+        max-width: 760px;
+      }
+      .greek {
+        font-family: 'GFS Didot', serif;
+      }
+
+      /* decoration */
+      .deco {
+        position: absolute;
+        pointer-events: none;
+      }
+
+      /* ===== Scene 1 : HERO ===== */
+      .scene-1 {
+        z-index: 1;
+        opacity: 1;
+      }
+      .hero-tag {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 24px;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--dim);
+      }
+      .mark {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        font-size: 220px;
+        line-height: 0.9;
+        letter-spacing: -0.01em;
+        color: var(--paper);
+        text-shadow: 0.05em 0.05em 0 rgba(0, 0, 0, 0.5);
+      }
+      .mark-idiot {
+        color: var(--blood);
+      }
+      .soon {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 40px;
+        font-weight: 500;
+        letter-spacing: 0.42em;
+        text-transform: lowercase;
+        color: var(--gold);
+      }
+      .temple {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 560px;
+        opacity: 0.16;
+      }
+      .float-greek {
+        position: absolute;
+        font-family: 'GFS Didot', serif;
+        color: var(--aegean);
+        opacity: 0.14;
+        font-size: 110px;
+        user-select: none;
+      }
+
+      /* ===== Scene 2 : QUESTION ===== */
+      .scene-2 {
+        z-index: 2;
+      }
+      .q1 {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        font-size: 150px;
+        line-height: 0.95;
+        color: var(--paper);
+      }
+      .q2 {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        font-size: 150px;
+        line-height: 0.95;
+        color: var(--blood);
+      }
+      .etym-empty {
+        margin-top: 14px;
+      }
+
+      /* ===== Scene 3 : EMPHASIS ===== */
+      .scene-3 {
+        z-index: 3;
+      }
+      .pulse-wrap {
+        position: relative;
+      }
+      .pulse-word {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        font-size: 200px;
+        line-height: 0.9;
+        color: var(--blood);
+        position: relative;
+      }
+      .scribble {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 840px;
+        height: 300px;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        pointer-events: none;
+      }
+      .scribble path {
+        fill: none;
+        stroke: var(--gold);
+        stroke-width: 10;
+        stroke-linecap: round;
+        stroke-dasharray: 2000;
+      }
+      .etym {
+        margin-top: 90px;
+        font-size: 34px;
+        line-height: 1.5;
+        max-width: 780px;
+        color: var(--dim);
+      }
+      .etym .greek {
+        color: var(--aegean);
+        font-size: 40px;
+      }
+
+      /* ===== Scene 4 : LIVE ===== */
+      .scene-4 {
+        z-index: 4;
+      }
+      .live-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+        border: 3px solid var(--paper);
+        padding: 14px 30px;
+        text-transform: uppercase;
+        letter-spacing: 0.24em;
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--paper);
+      }
+      .rec-dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--blood);
+      }
+      .live-big {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        font-size: 150px;
+        line-height: 0.95;
+        color: var(--paper);
+      }
+      .live-sub {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 40px;
+        font-weight: 400;
+        color: var(--dim);
+        max-width: 820px;
+        line-height: 1.35;
+      }
+      .bio {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 28px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      /* ===== Scene 5 : END CARD ===== */
+      .scene-5 {
+        z-index: 5;
+      }
+      .end-mark {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        font-size: 120px;
+        line-height: 0.92;
+        color: var(--paper);
+        text-shadow: 0.05em 0.05em 0 rgba(0, 0, 0, 0.5);
+      }
+      .end-mark span {
+        color: var(--blood);
+      }
+      .end-reveal-kicker {
+        margin-top: 30px;
+      }
+      .end-reveal {
+        font-family: 'Anton', sans-serif;
+        text-transform: uppercase;
+        font-size: 170px;
+        line-height: 0.95;
+        color: var(--gold);
+      }
+      .end-url {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 32px;
+        letter-spacing: 0.2em;
+        color: var(--dim);
+      }
+
+      #black-out {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #trans {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--ink);
+        z-index: 50;
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-wtrm" id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1080" data-height="1920">
+      <audio data-hf-id="hf-v8o8" id="music" data-start="0" data-duration="20" data-track-index="2" src="atb-guitar-20s.mp3" data-volume="0.66"></audio>
+
+      <!-- ================= SCENE 1 : HERO ================= -->
+      <div data-hf-id="hf-bbmy" id="scene-1" class="scene scene-1">
+        <svg data-hf-id="hf-hxob" class="temple" viewBox="0 0 1080 560" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+          <g data-hf-id="hf-uiwh" fill="none" stroke="#6c8cff" stroke-width="5" opacity="0.9">
+            <path data-hf-id="hf-0hrd" d="M90 180 L540 60 L990 180 Z" />
+            <rect data-hf-id="hf-cdys" x="90" y="182" width="900" height="16" />
+            <rect data-hf-id="hf-fnef" x="70" y="198" width="940" height="12" />
+            <rect data-hf-id="hf-19xy" x="150" y="216" width="30" height="220" />
+            <rect data-hf-id="hf-lfp6" x="280" y="216" width="30" height="220" />
+            <rect data-hf-id="hf-g6f7" x="410" y="216" width="30" height="220" />
+            <rect data-hf-id="hf-ov2x" x="540" y="216" width="30" height="220" />
+            <rect data-hf-id="hf-2zpb" x="670" y="216" width="30" height="220" />
+            <rect data-hf-id="hf-kxdk" x="800" y="216" width="30" height="220" />
+            <rect data-hf-id="hf-comg" x="930" y="216" width="30" height="220" />
+            <rect data-hf-id="hf-b2vb" x="60" y="436" width="960" height="16" />
+          </g>
+        </svg>
+        <span data-hf-id="hf-di9s" class="float-greek" style="top: 12%; left: 8%">ἰ</span>
+        <span data-hf-id="hf-1ufl" class="float-greek" style="top: 70%; left: 10%; font-size: 150px">δ</span>
+        <span data-hf-id="hf-i3l3" class="float-greek" style="top: 20%; right: 12%; font-size: 90px">ι</span>
+        <span data-hf-id="hf-3gm5" class="float-greek" style="top: 76%; right: 8%; font-size: 170px">ώ</span>
+        <span data-hf-id="hf-pr3w" class="float-greek" style="top: 46%; left: 44%; font-size: 70px">τ</span>
+        <span data-hf-id="hf-4vwz" class="float-greek" style="top: 84%; left: 36%; font-size: 110px">η</span>
+
+        <div data-hf-id="hf-io3i" class="hero-tag">a civic humiliation experiment</div>
+        <h1 data-hf-id="hf-ze0x" class="mark">amithe<span data-hf-id="hf-n5x3" class="mark-idiot">idiot</span></h1>
+        <div data-hf-id="hf-7rel" class="soon">find out soon</div>
+      </div>
+
+      <!-- ================= SCENE 2 : QUESTION ================= -->
+      <div data-hf-id="hf-5b14" id="scene-2" class="scene scene-2">
+        <div data-hf-id="hf-e1e7" class="kicker">the greeks had a word for you</div>
+        <div data-hf-id="hf-t0yl" class="q1">are you smarter</div>
+        <div data-hf-id="hf-357b" class="q2">than an idiot?</div>
+        <div data-hf-id="hf-hzt2" class="sub">in ancient greece, the ἰδιώτης was a citizen who checked out of public life.</div>
+      </div>
+
+      <!-- ================= SCENE 3 : EMPHASIS ================= -->
+      <div data-hf-id="hf-xuua" id="scene-3" class="scene scene-3">
+        <div data-hf-id="hf-40vs" class="pulse-wrap">
+          <div data-hf-id="hf-g9s4" class="pulse-word"><span data-hf-id="hf-19o3" id="idiotWord">idiot?</span></div>
+          <svg data-hf-id="hf-5drf" class="scribble" viewBox="0 0 900 320" aria-hidden="true">
+            <path data-hf-id="hf-waz3" d="M120 170 C 60 70, 300 20, 520 60 S 830 90, 840 170 S 640 300, 460 270 S 120 270, 150 170" />
+          </svg>
+        </div>
+        <div data-hf-id="hf-vj9o" class="etym">
+          <span data-hf-id="hf-6zx5" class="greek">ἰδιώτης</span> — not "stupid," a private citizen who tuned out of how their
+          country was run.
+        </div>
+      </div>
+
+      <!-- ================= SCENE 4 : LIVE ================= -->
+      <div data-hf-id="hf-d9q4" id="scene-4" class="scene scene-4">
+        <div data-hf-id="hf-heyy" class="live-badge"><span data-hf-id="hf-7vwv" class="rec-dot"></span>live</div>
+        <div data-hf-id="hf-0aot" class="live-big">thursday</div>
+        <div data-hf-id="hf-l4bw" class="live-sub">building amitheidiot from scratch — come watch it happen.</div>
+        <div data-hf-id="hf-792z" class="bio">link in bio</div>
+      </div>
+
+      <!-- ================= SCENE 5 : END CARD ================= -->
+      <div data-hf-id="hf-77s2" id="scene-5" class="scene scene-5">
+        <div data-hf-id="hf-awyb" class="end-mark">amithe<span data-hf-id="hf-o8g4">idiot</span></div>
+        <div data-hf-id="hf-l5ha" class="kicker end-reveal-kicker">full reveal</div>
+        <div data-hf-id="hf-efqp" class="end-reveal">sept 17</div>
+        <div data-hf-id="hf-7tel" class="end-url">amitheidiot.com</div>
+      </div>
+
+      <div data-hf-id="hf-sqi1" id="trans"></div>
+      <div data-hf-id="hf-xipl" id="black-out"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      /* ---- Scene 1 (0–4s) HERO ---- */
+      tl.from('.hero-tag', { opacity: 0, y: 24, duration: 0.7, ease: 'power3.out' }, 0.15);
+      tl.from('.mark', { opacity: 0, y: 90, scale: 1.12, duration: 0.9, ease: 'expo.out' }, 0.3);
+      tl.from('.soon', { opacity: 0, y: 20, duration: 0.6, ease: 'power2.out' }, 0.95);
+
+      /* ---- transition → scene 2 (4s) ---- */
+      tl.to('#trans', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 4.0);
+      tl.set('#scene-1', { opacity: 0 }, 4.35);
+      tl.set('#scene-2', { opacity: 1 }, 4.35);
+      tl.to('#trans', { opacity: 0, duration: 0.4, ease: 'power2.out' }, 4.4);
+      tl.from('.scene-2 .kicker', { opacity: 0, y: 30, duration: 0.6, ease: 'power3.out' }, 4.5);
+      tl.from('.q1', { opacity: 0, y: 60, duration: 0.6, ease: 'power3.out' }, 4.6);
+      tl.from('.q2', { opacity: 0, y: 60, scale: 0.92, duration: 0.7, ease: 'back.out(1.5)' }, 4.8);
+      tl.from('.scene-2 .sub', { opacity: 0, duration: 0.6 }, 5.4);
+
+      /* ---- transition → scene 3 (9s) ---- */
+      tl.to('#trans', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 9.0);
+      tl.set('#scene-2', { opacity: 0 }, 9.35);
+      tl.set('#scene-3', { opacity: 1 }, 9.35);
+      tl.to('#trans', { opacity: 0, duration: 0.4, ease: 'power2.out' }, 9.4);
+      tl.from('.pulse-word', { opacity: 0, scale: 0.7, duration: 0.7, ease: 'back.out(1.6)' }, 9.5);
+      tl.from('.scribble path', { strokeDashoffset: 2000, duration: 0.7, ease: 'power2.out' }, 9.8);
+      tl.from('.etym', { opacity: 0, y: 26, duration: 0.6, ease: 'power3.out' }, 10.3);
+      tl.to('#idiotWord', { scale: 1.06, duration: 1.2, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 11.0);
+
+      /* ---- transition → scene 4 (13s) ---- */
+      tl.to('#trans', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 13.0);
+      tl.set('#scene-3', { opacity: 0 }, 13.35);
+      tl.set('#scene-4', { opacity: 1 }, 13.35);
+      tl.to('#trans', { opacity: 0, duration: 0.4, ease: 'power2.out' }, 13.4);
+      tl.from('.live-badge', { opacity: 0, scale: 0.6, duration: 0.5, ease: 'back.out(1.7)' }, 13.5);
+      tl.from('.live-big', { opacity: 0, y: 70, duration: 0.7, ease: 'power3.out' }, 13.6);
+      tl.from('.live-sub', { opacity: 0, y: 30, duration: 0.55, ease: 'power2.out' }, 13.95);
+      tl.from('.bio', { opacity: 0, duration: 0.45 }, 14.35);
+      tl.to('.rec-dot', { opacity: 0.25, duration: 0.5, yoyo: true, repeat: 5, ease: 'sine.inOut' }, 14.6);
+
+      /* ---- transition → scene 5 (17.2s) ---- */
+      tl.to('#trans', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 17.2);
+      tl.set('#scene-4', { opacity: 0 }, 17.55);
+      tl.set('#scene-5', { opacity: 1 }, 17.55);
+      tl.to('#trans', { opacity: 0, duration: 0.4, ease: 'power2.out' }, 17.6);
+      tl.from('.end-mark', { opacity: 0, scale: 0.92, duration: 0.6, ease: 'expo.out' }, 17.7);
+      tl.from('.end-reveal-kicker', { opacity: 0, y: 24, duration: 0.5, ease: 'power3.out' }, 18.0);
+      tl.from('.end-reveal', { opacity: 0, y: 40, duration: 0.7, ease: 'expo.out' }, 18.2);
+      tl.from('.end-url', { opacity: 0, duration: 0.5 }, 18.7);
+
+      /* ---- final fade to black (19.4s) ---- */
+      tl.set('#black-out', { opacity: 0 }, 19.4);
+      tl.to('#black-out', { opacity: 1, duration: 0.8, ease: 'power2.in' }, 19.4);
+
+      window.__timelines['main'] = tl;
+    </script>
+  </body>
+</html>
