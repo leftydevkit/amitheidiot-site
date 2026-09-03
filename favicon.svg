@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#16130e"/>
+  <!-- ear tufts -->
+  <path d="M18 21 L11 8 L30 17 Z" fill="#e5c158"/>
+  <path d="M46 21 L53 8 L34 17 Z" fill="#e5c158"/>
+  <!-- body -->
+  <path d="M32 12 C 17 12, 11 28, 15 42 C 18 54, 46 54, 49 42 C 53 28, 47 12, 32 12 Z" fill="#e5c158"/>
+  <!-- wings -->
+  <path d="M17 44 C 15 30, 20 20, 26 18 C 21 26, 21 36, 22 45 Z" fill="#c9a227"/>
+  <path d="M47 44 C 49 30, 44 20, 38 18 C 43 26, 43 36, 42 45 Z" fill="#c9a227"/>
+  <!-- eyes -->
+  <circle cx="24" cy="32" r="8.5" fill="#f1ece0"/>
+  <circle cx="40" cy="32" r="8.5" fill="#f1ece0"/>
+  <circle cx="25" cy="33" r="3.2" fill="#16130e"/>
+  <circle cx="39" cy="33" r="3.2" fill="#16130e"/>
+  <!-- beak -->
+  <path d="M32 40 L26 45 L32 48 L38 45 Z" fill="#ff5a5f"/>
+</svg>
