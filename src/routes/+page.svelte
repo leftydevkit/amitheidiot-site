@@ -196,7 +196,7 @@
 	<span class="float" style="top:44%; left:44%; font-size:2.8rem; animation-delay:1.2s">τ</span>
 	<span class="float" style="top:84%; left:40%; font-size:3.4rem; animation-delay:2s">η</span>
 
-	<h1 class="mark">am<span style="color: #3C3B6E">i</span>the<span class="idiot">idiot</span></h1>
+	<h1 class="mark">am<span style="color: #4169E1">i</span>the<span class="idiot">idiot</span></h1>
 
 	<p class="question">are you smarter than an <span class="idiot">idiot?</span></p>
 
