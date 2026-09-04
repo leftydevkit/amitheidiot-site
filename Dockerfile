@@ -1,14 +1,16 @@
-FROM nginx:alpine
-COPY . /usr/share/nginx/html
-RUN printf 'server {\n\
-    listen 80;\n\
-    root /usr/share/nginx/html;\n\
-    index index.html;\n\
-    location / {\n\
-        try_files $uri $uri/ /index.html;\n\
-    }\n\
-    location ~* \\.(woff2|css|mp3)$ {\n\
-        add_header Cache-Control "public, max-age=31536000, immutable";\n\
-    }\n\
-}\n' > /etc/nginx/conf.d/default.conf
-EXPOSE 80
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app/build build/
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/node_modules node_modules/
+ENV PORT=3000
+ENV HOST=0.0.0.0
+EXPOSE 3000
+CMD ["node", "build"]
