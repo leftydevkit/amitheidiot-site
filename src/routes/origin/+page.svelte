@@ -57,7 +57,7 @@
 				<source
 					srcset="/images/origin/{imgId}-600.webp 600w,
 							/images/origin/{imgId}-900.webp 900w,
-							/images/origin/{imgId}-1200.webp 1200w"
+							/images/origin/{imgId}-1366.webp 1366w"
 					sizes="100vw"
 					type="image/webp"
 				/>
@@ -117,6 +117,9 @@
 		height: 100%;
 		object-fit: cover;
 		object-position: center;
+		/* Faintness lives here, not baked into the file — the WebP keeps full
+		   detail and stays crisp. */
+		opacity: 0.45;
 	}
 	/* Contrast scrim between image and text (§5). */
 	.scrim {
@@ -126,9 +129,9 @@
 		pointer-events: none;
 		background: linear-gradient(
 			to bottom,
-			rgba(22, 19, 14, 0.55),
-			rgba(22, 19, 14, 0.15) 40%,
-			rgba(22, 19, 14, 0.75)
+			rgba(22, 19, 14, 0.72),
+			rgba(22, 19, 14, 0.5) 42%,
+			rgba(22, 19, 14, 0.85)
 		);
 	}
 	.origin-head {
@@ -148,8 +151,8 @@
 	.stage {
 		flex: 1;
 		display: flex;
-		align-items: center;
-		padding: 40px 0;
+		align-items: flex-start;
+		padding: 4vh 0 40px;
 	}
 	.progress {
 		display: flex;

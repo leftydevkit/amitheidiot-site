@@ -98,7 +98,7 @@ export const LESSON_BEATS: Beat[] = [
 
 export const SKIP_LINE = 'skip →';
 export const SKIP_COPY = 'you skipped the one part that would have helped';
-export const REENTRY_LINK = 'the word ↗';
+export const REENTRY_LINK = "what's an idiot, actually? ↗";
 
 // Image id per beat (index-aligned with LESSON_BEATS), per IMAGE-BRIEF.md §2.
 // Decorative texture — never content, always rendered alt="" / aria-hidden.

@@ -45,6 +45,14 @@
 	.landing .lede { max-width: 34ch; }
 	.actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 26px; }
 	.actions .button { flex: 0 1 auto; }
+	/* The re-entry link is a real invitation — bigger and fuller than a footer note. */
+	.actions .quiet-link {
+		font-size: 1.25rem;
+		font-weight: 500;
+		opacity: 0.92;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 6px;
+	}
 
 	.landing-tease {
 		flex: 0 0 auto;
@@ -62,8 +70,8 @@
 	@media (max-width: 620px) {
 		.landing .page-title { font-size: min(clamp(3rem, 15vw, 9rem), 19vh); }
 		.lede { font-size: 1.05rem; }
-		.actions { gap: 16px; margin-top: 22px; }
+		.actions { gap: 18px; margin-top: 22px; }
 		.actions .button { flex: 1 1 100%; }
-		.actions .quiet-link { font-size: 0.9rem; }
+		.actions .quiet-link { font-size: 1.15rem; }
 	}
 </style>
