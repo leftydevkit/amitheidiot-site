@@ -13,10 +13,6 @@
 	onMount(() => { mounted = true; });
 </script>
 
-<svelte:head>
-	<title>amitheidiot — the word</title>
-</svelte:head>
-
 <article class={mounted ? 'beat entered' : 'beat'}>
 	{#each beat.lines as line, i}
 		{#if i === 0}
@@ -36,8 +32,8 @@
 
 <style>
 	.beat {
-		cursor: pointer;
-		outline: none;
+		position: relative;
+		z-index: 1;
 		max-width: 640px;
 		margin: 0 auto;
 		opacity: 0;
@@ -53,6 +49,7 @@
 		line-height: 1.5;
 		margin: 0 0 0.6em;
 		text-wrap: pretty;
+		text-shadow: 0 1px 8px rgba(22, 19, 14, 0.5);
 	}
 	.first { font-size: clamp(3rem, 12vw, 6rem); margin-bottom: 0.2em; line-height: 1; }
 	.emphatic { font-style: italic; }

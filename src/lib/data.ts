@@ -100,6 +100,18 @@ export const SKIP_LINE = 'skip →';
 export const SKIP_COPY = 'you skipped the one part that would have helped';
 export const REENTRY_LINK = 'the word ↗';
 
+// Image id per beat (index-aligned with LESSON_BEATS), per IMAGE-BRIEF.md §2.
+// Decorative texture — never content, always rendered alt="" / aria-hidden.
+export const BEAT_IMAGE_IDS: string[] = [
+	'beat-1',
+	'beat-2',
+	'beat-3',
+	'beat-4',
+	'beat-5',
+	'beat-6',
+	'beat-7'
+];
+
 // ---------------------------------------------------------------------------
 // §2 — copy banks.
 // ---------------------------------------------------------------------------

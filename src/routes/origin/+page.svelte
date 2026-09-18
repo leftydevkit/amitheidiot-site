@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Beat from '$lib/components/Beat.svelte';
-	import { LESSON_BEATS, SKIP_LINE, SKIP_COPY } from '$lib/data';
+	import { LESSON_BEATS, BEAT_IMAGE_IDS, SKIP_LINE, SKIP_COPY } from '$lib/data';
 	import { markLessonSeen } from '$lib/gates';
 
 	let index = $state(0);
@@ -35,35 +35,104 @@
 <svelte:head>
 	<title>amitheidiot — the word</title>
 	<meta name="description" content="the word had a different meaning once." />
+	<meta property="og:title" content="amitheidiot — the word" />
+	<meta property="og:description" content="the word had a different meaning once." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://amitheidiot.com/origin" />
+	<meta property="og:image" content="https://amitheidiot.com/images/origin/og-origin.jpg" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content="https://amitheidiot.com/images/origin/og-origin.jpg" />
+	<!-- Beat 1 is render-blocking-preloaded (§7). -->
+	<link rel="preload" as="image" href="/images/origin/beat-1-900.webp" fetchpriority="high" />
 </svelte:head>
 
-<main class="shell origin">
-	<header class="origin-head">
-		<a class="wordmark" href="/">am<span class="accent">i</span>the<span class="blood">idiot</span></a>
-		<button class="quiet-link skip" onclick={skip}>{SKIP_LINE}</button>
-	</header>
+<main class="origin">
+	<!-- Full-bleed background + scrim. All 7 rendered (tiny, ~200KB total) and
+	     crossfaded so there is never a pop-in; the active beat's layer is opaque. -->
+	{#each BEAT_IMAGE_IDS as imgId, i}
+		<div class="bg" class:bg-active={i === index && !skipped} aria-hidden="true">
+			<picture>
+				<source
+					srcset="/images/origin/{imgId}-600.webp 600w,
+							/images/origin/{imgId}-900.webp 900w,
+							/images/origin/{imgId}-1200.webp 1200w"
+					sizes="100vw"
+					type="image/webp"
+				/>
+				<img src="/images/origin/{imgId}-900.webp" alt="" loading={i <= index + 1 || i === 0 ? 'eager' : 'lazy'} />
+			</picture>
+		</div>
+	{/each}
+	<div class="scrim" aria-hidden="true"></div>
 
-	{#if skipped}
-		<article class="skip-copy">
-			<p>{SKIP_COPY}</p>
-			<button class="button" onclick={finish}>take the quiz</button>
-		</article>
-	{:else}
-		<div class="stage">
-			{#key index}
-				<Beat beat={LESSON_BEATS[index]} isLast={index === lastIndex} onAdvance={advance} />
-			{/key}
-		</div>
-		<div class="progress" aria-hidden="true">
-			{#each LESSON_BEATS as _, i}
-				<span class:dot-active={i <= index}></span>
-			{/each}
-		</div>
-	{/if}
+	<div class="shell origin-inner">
+		<header class="origin-head">
+			<a class="wordmark" href="/">am<span class="accent">i</span>the<span class="blood">idiot</span></a>
+			<button class="quiet-link skip" onclick={skip}>{SKIP_LINE}</button>
+		</header>
+
+		{#if skipped}
+			<article class="skip-copy">
+				<p>{SKIP_COPY}</p>
+				<button class="button" onclick={finish}>take the quiz</button>
+			</article>
+		{:else}
+			<div class="stage">
+				{#key index}
+					<Beat beat={LESSON_BEATS[index]} isLast={index === lastIndex} onAdvance={advance} />
+				{/key}
+			</div>
+			<div class="progress" aria-hidden="true">
+				{#each LESSON_BEATS as _, i}
+					<span class:dot-active={i <= index}></span>
+				{/each}
+			</div>
+		{/if}
+	</div>
 </main>
 
 <style>
-	.origin { min-height: 100svh; display: flex; flex-direction: column; }
+	.origin {
+		position: relative;
+		min-height: 100svh;
+		overflow: hidden;
+	}
+	.origin-inner {
+		position: relative;
+		z-index: 2;
+		min-height: 100svh;
+		display: flex;
+		flex-direction: column;
+	}
+	.bg {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		opacity: 0;
+		transition: opacity 320ms ease;
+	}
+	.bg.bg-active { opacity: 1; }
+	.bg img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+	/* Contrast scrim between image and text (§5). */
+	.scrim {
+		position: fixed;
+		inset: 0;
+		z-index: 1;
+		pointer-events: none;
+		background: linear-gradient(
+			to bottom,
+			rgba(22, 19, 14, 0.55),
+			rgba(22, 19, 14, 0.15) 40%,
+			rgba(22, 19, 14, 0.75)
+		);
+	}
 	.origin-head {
 		display: flex;
 		align-items: center;
@@ -97,7 +166,15 @@
 		transition: opacity 200ms ease;
 	}
 	.progress .dot-active { opacity: 0.9; }
-	.skip-copy { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 640px; margin: 0 auto; gap: 24px; }
+	.skip-copy {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		max-width: 640px;
+		margin: 0 auto;
+		gap: 24px;
+	}
 	.skip-copy p { font-size: clamp(1.4rem, 4vw, 2.2rem); line-height: 1.4; }
 	.skip-copy .button { align-self: flex-start; }
 </style>
