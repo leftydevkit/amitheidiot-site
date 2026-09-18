@@ -3,13 +3,24 @@ import type { Question, Tier } from './types';
 
 // §9.2 — tunable numbers live here as named constants (single source of truth).
 export const QUIZ_LENGTH = 5;
-export const TIMER_SECONDS = 3;
-export const DIFFICULTY_WEIGHTS: Record<1 | 2 | 3, number> = { 1: 3, 2: 2, 3: 1 };
 
 /**
- * Draw `QUIZ_LENGTH` unique questions without replacement, weighted toward
- * difficulty 1–2 (3:2:1). The bank is 12×d1 / 9×d2 / 3×d3, so every draw stays
- * dominated by — but not exclusively made of — easy items.
+ * Three levels, each with its own clock. Named in the app's dry, mean voice:
+ * the harder the question, the less rope you get. `difficulty` on a Question
+ * is the level key.
+ */
+export const LEVELS: Record<1 | 2 | 3, { name: string; seconds: number }> = {
+	1: { name: 'the gimme', seconds: 5 },
+	2: { name: 'the squeeze', seconds: 4 },
+	3: { name: 'the reckoning', seconds: 3 }
+};
+
+export const DIFFICULTY_WEIGHTS: Record<1 | 2 | 3, number> = { 1: 3, 2: 3, 3: 2 };
+
+/**
+ * Draw `QUIZ_LENGTH` unique questions without replacement, weighted 3:3:2
+ * across the three levels. The bank is 22×gimme / 23×squeeze / 22×reckoning,
+ * so a run is broadly balanced but never the same five twice.
  */
 export function pickFiveQuestions(): Question[] {
 	const pool = [...QUESTIONS];

@@ -6,10 +6,8 @@
 	import ProgressDots from '$lib/components/ProgressDots.svelte';
 	import { NO_ANSWER_LABEL, WRONG_LINES, TIMEOUT_LINES, CORRECT_LINES } from '$lib/data';
 	import type { Question, RunAnswer, RunResult } from '$lib/types';
-	import { pickFiveQuestions, shuffle, deriveTier, distinctLines, QUIZ_LENGTH, TIMER_SECONDS } from '$lib/quiz';
+	import { pickFiveQuestions, shuffle, deriveTier, distinctLines, QUIZ_LENGTH, LEVELS } from '$lib/quiz';
 	import { unlockStats, recordMissed, saveLastResult, clearLastResult } from '$lib/gates';
-
-	const TIMER_MS = TIMER_SECONDS * 1000;
 
 	interface PreparedQuestion {
 		question: Question;
@@ -46,6 +44,7 @@
 
 	const current = $derived(questions[index]);
 	const correctSoFar = $derived(answers.filter((a) => a.correct).length);
+	const level = $derived(current ? LEVELS[current.question.difficulty] : null);
 
 	function recordAnswer(choiceIndex: number | null, timeMs: number) {
 		if (!current) return;
@@ -112,7 +111,7 @@
 
 	function timeout() {
 		if (phase === 'feedback') return;
-		recordAnswer(null, TIMER_MS);
+		recordAnswer(null, current ? LEVELS[current.question.difficulty].seconds * 1000 : 0);
 	}
 
 	function next() {
@@ -127,7 +126,7 @@
 
 <svelte:head>
 	<title>amitheidiot — the quiz</title>
-	<meta name="description" content="five questions. three seconds each." />
+	<meta name="description" content="five questions. three levels. the clock tightens as it gets harder." />
 </svelte:head>
 
 <main class="screen quiz">
@@ -143,11 +142,14 @@
 					attempted={answers.length}
 				/>
 
-				<h1 class="prompt">{current.question.prompt}</h1>
+				<div class="level-row" class:is-hard={current.question.difficulty === 3}>
+					<span class="level-name">{level?.name}</span>
+					{#if phase === 'asking'}
+						<QuizTimer seconds={level?.seconds ?? 5} onExpire={timeout} />
+					{/if}
+				</div>
 
-				{#if phase === 'asking'}
-					<QuizTimer onExpire={timeout} />
-				{/if}
+				<h1 class="prompt">{current.question.prompt}</h1>
 
 				<div class="choices">
 					{#each current.shuffled as label, i}
@@ -184,11 +186,33 @@
 		padding: max(20px, env(safe-area-inset-top)) 0 20px;
 	}
 	.loading { color: var(--paper); }
+	.level-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+	}
+	.level-name {
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--paper);
+		opacity: 0.72;
+		border: 2px solid rgba(241, 236, 224, 0.3);
+		padding: 4px 10px;
+		white-space: nowrap;
+	}
+	.level-row.is-hard .level-name {
+		color: var(--blood);
+		border-color: var(--blood);
+		opacity: 1;
+	}
 	.prompt {
 		font: clamp(1.6rem, 6vw, 3rem)/1.1 'Anton', sans-serif;
 		font-size: min(clamp(1.6rem, 6vw, 3rem), 8vh);
 		text-transform: uppercase;
-		margin: 10px 0 4px;
+		margin: 12px 0 4px;
 	}
 	.choices { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
 	.feedback { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }

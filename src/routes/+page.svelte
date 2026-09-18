@@ -11,9 +11,9 @@
 
 <svelte:head>
 	<title>amitheidiot — civic knowledge, briefly</title>
-	<meta name="description" content="five questions. three seconds each. the word had a different meaning once." />
+	<meta name="description" content="five questions. three levels. the clock tightens as it gets harder." />
 	<meta property="og:title" content="amitheidiot" />
-	<meta property="og:description" content="five questions. three seconds each. the word had a different meaning once." />
+	<meta property="og:description" content="five questions. three levels. the clock tightens as it gets harder." />
 </svelte:head>
 
 <main class="screen landing">

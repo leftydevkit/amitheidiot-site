@@ -19,7 +19,7 @@
 
 			<section class="block">
 				<h2>what this is</h2>
-				<p>five civics questions, three seconds each, and a story about what the word idiot used to mean. no accounts, no email, no analytics, no data leaves your browser.</p>
+				<p>five civics questions drawn from a pool of 67, across three difficulty levels — the clock tightens as it gets harder — and a story about what the word idiot used to mean. no accounts, no email, no analytics, no data leaves your browser.</p>
 			</section>
 
 			<section class="block">

@@ -5,7 +5,7 @@ export interface Question {
 	/** Index into the unshuffled `choices` above (correct choice always written first). */
 	answerIndex: 0 | 1 | 2 | 3;
 	sourceUrl: string;
-	category: 'civics-structure' | 'civics-rights' | 'history' | 'symbols-geography';
+	category: 'civics-structure' | 'civics-rights' | 'history' | 'symbols-geography' | 'current';
 	difficulty: 1 | 2 | 3;
 }
 
