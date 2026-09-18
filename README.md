@@ -1,42 +1,40 @@
-# sv
+# amitheidiot — sonnet
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Five questions. Three seconds each. The word had a different meaning once.
 
-## Creating a project
+A civic-knowledge quiz wrapped in a story about what "idiot" used to mean. Zero accounts, zero PII, zero analytics. Everything runs client-side; two localStorage gates (lesson seen, stats unlocked) are the only persistence.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Routes
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- `/` — the word, the thesis, one state-dependent CTA
+- `/origin` — the story of the word, seven beats
+- `/quiz` — five questions, three seconds each, chromeless
+- `/results` — score, tier, pep talk, reveal, share
+- `/stats` — the wall, locked until a run completes
+- `/learn` — re-teach the questions you missed
+- `/about` — sources, method, last-reviewed date, disclaimer
 
-To recreate this project with the same configuration:
+## Develop
 
-```sh
-# recreate this project
-npx sv@0.17.0 create --template minimal --types ts --add sveltekit-adapter="adapter:auto" --no-download-check --no-install amitheidiot-landing
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+## Build & run
 
-To create a production version of your app:
-
-```sh
+```bash
 npm run build
+node build
 ```
 
-You can preview the production build with `npm run preview`.
+Docker:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+docker build -t amitheidiot-sonnet .
+docker run -p 80:80 amitheidiot-sonnet
+```
+
+## Content provenance
+
+All 24 quiz questions derive from the public-domain USCIS 2008 Civics Test. All 24 stats are cited to their live publishers; the full source list and methodology are on `/about`.

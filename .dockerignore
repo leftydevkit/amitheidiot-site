@@ -2,8 +2,3 @@ node_modules
 build
 .svelte-kit
 .git
-.env
-*.db
-Dockerfile
-.dockerignore
-README.md
