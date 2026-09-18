@@ -45,7 +45,9 @@
 		text-wrap: pretty;
 		text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
 	}
-	.first {
+	/* Scoped as `.beat p.first` — as a bare `.first` it lost to `.beat p`
+	   on specificity and the opening word rendered at paragraph size. */
+	.beat p.first {
 		font-size: calc(clamp(2.3rem, 9vw, 5rem) * var(--beat-scale, 1));
 		margin-bottom: 0.1em;
 		line-height: 1;
