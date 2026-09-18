@@ -2,11 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { Beat } from '$lib/data';
 
-	let { beat, onAdvance, isLast }: {
-		beat: Beat;
-		onAdvance: () => void;
-		isLast: boolean;
-	} = $props();
+	let { beat }: { beat: Beat } = $props();
 
 	let mounted = $state(false);
 	// SSR-safe: entrance animation only after client mount (§9.13).
@@ -23,17 +19,13 @@
 			<p>{line}</p>
 		{/if}
 	{/each}
-	{#if isLast}
-		<button class="button gold" onclick={onAdvance}>start</button>
-	{:else}
-		<button class="hint" onclick={onAdvance}>tap to continue</button>
-	{/if}
 </article>
 
 <style>
 	.beat {
 		position: relative;
 		z-index: 1;
+		width: 100%;
 		max-width: 640px;
 		margin: 0 auto;
 		opacity: 0;
@@ -44,28 +36,19 @@
 		transform: none;
 		transition: opacity 320ms ease, transform 320ms ease;
 	}
+	/* --beat-scale is set by the route to shrink the copy until it fits the
+	   screen, so a long beat never scrolls. em-based spacing scales with it. */
 	.beat p {
-		font-size: clamp(1.25rem, 3.4vw, 1.9rem);
-		line-height: 1.5;
-		margin: 0 0 0.6em;
+		font-size: calc(clamp(1.1rem, 3.1vw, 1.7rem) * var(--beat-scale, 1));
+		line-height: 1.45;
+		margin: 0 0 0.5em;
 		text-wrap: pretty;
-		text-shadow: 0 1px 8px rgba(22, 19, 14, 0.5);
+		text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
 	}
-	.first { font-size: clamp(3rem, 12vw, 6rem); margin-bottom: 0.2em; line-height: 1; }
+	.first {
+		font-size: calc(clamp(2.3rem, 9vw, 5rem) * var(--beat-scale, 1));
+		margin-bottom: 0.1em;
+		line-height: 1;
+	}
 	.emphatic { font-style: italic; }
-	.hint {
-		display: inline-block;
-		margin-top: 1em;
-		background: none;
-		border: 0;
-		color: var(--gold);
-		font: inherit;
-		font-size: 0.8rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		opacity: 0.8;
-		text-decoration: underline;
-		text-underline-offset: 4px;
-	}
-	.button { margin-top: 2em; }
 </style>

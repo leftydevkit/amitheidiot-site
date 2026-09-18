@@ -31,16 +31,12 @@ body {
 	touch-action: manipulation;
 }
 
-/* Noise overlay — opacity 0.07 per Risks #12 (app-scale, not hero-scale). */
-body::before {
-	content: '';
-	position: fixed;
-	inset: 0;
-	pointer-events: none;
-	opacity: 0.07;
-	z-index: 20;
-	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
-}
+/*
+ * NOTE: the site-wide noise/grain overlay (an SVG turbulence texture over
+ * everything) was removed 2026-09-18. At ~0.07 opacity it lifted a pure-black
+ * background from 0 to ~6/255 and its pattern read as grey mottle — fine on the
+ * old warm-brown ground, obvious and ugly on true black. Blacks are now clean.
+ */
 
 a { color: inherit; }
 button { font: inherit; cursor: pointer; }
