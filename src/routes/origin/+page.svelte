@@ -96,13 +96,13 @@
 <style>
 	.origin {
 		position: relative;
-		min-height: 100svh;
+		height: 100svh;
 		overflow: hidden;
 	}
 	.origin-inner {
 		position: relative;
 		z-index: 2;
-		min-height: 100svh;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 	}
@@ -117,7 +117,7 @@
 	.bg img {
 		width: 100%;
 		height: 100%;
-		object-fit: contain;
+		object-fit: cover;
 		object-position: center;
 	}
 	/* Contrast scrim between image and text (§5). */
