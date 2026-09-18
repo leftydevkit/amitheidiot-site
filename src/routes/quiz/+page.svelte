@@ -130,54 +130,75 @@
 	<meta name="description" content="five questions. three seconds each." />
 </svelte:head>
 
-<main class="shell quiz">
-	{#if !current}
-		<p class="loading">loading.</p>
-	{:else}
-		<ProgressDots
-			current={index + 1}
-			total={QUIZ_LENGTH}
-			correct={correctSoFar}
-			attempted={answers.length}
-		/>
+<main class="screen quiz">
+	<div class="screen-body">
+		<div class="wrap quiz-inner">
+			{#if !current}
+				<p class="loading">loading.</p>
+			{:else}
+				<ProgressDots
+					current={index + 1}
+					total={QUIZ_LENGTH}
+					correct={correctSoFar}
+					attempted={answers.length}
+				/>
 
-		{#if phase === 'asking'}
-			<h1 class="prompt">{current.question.prompt}</h1>
-			<QuizTimer onExpire={timeout} />
-			<div class="choices">
-				{#each current.shuffled as label, i}
-					<QuizChoice {label} state="idle" disabled={false} onSelect={() => select(i)} />
-				{/each}
-			</div>
-		{:else}
-			<h1 class="prompt">{current.question.prompt}</h1>
-			<div class="choices">
-				{#each current.shuffled as label, i}
-					<QuizChoice {label} state={choiceStates[i]} disabled onSelect={() => {}} />
-				{/each}
-			</div>
-			<div class="feedback">
-				{#if answers[answers.length - 1]?.choiceIndex === null}
-					<p class="answer">{NO_ANSWER_LABEL}</p>
+				<h1 class="prompt">{current.question.prompt}</h1>
+
+				{#if phase === 'asking'}
+					<QuizTimer onExpire={timeout} />
 				{/if}
-				<p class="line">{feedbackLine}</p>
-				<button class="button" onclick={next}>next</button>
-			</div>
-		{/if}
-	{/if}
+
+				<div class="choices">
+					{#each current.shuffled as label, i}
+						<QuizChoice
+							{label}
+							state={phase === 'asking' ? 'idle' : choiceStates[i]}
+							disabled={phase === 'feedback'}
+							onSelect={() => select(i)}
+						/>
+					{/each}
+				</div>
+
+				{#if phase === 'feedback'}
+					<div class="feedback">
+						{#if answers[answers.length - 1]?.choiceIndex === null}
+							<p class="answer">{NO_ANSWER_LABEL}</p>
+						{/if}
+						<p class="line">{feedbackLine}</p>
+						<button class="button" onclick={next}>next</button>
+					</div>
+				{/if}
+			{/if}
+		</div>
+	</div>
 </main>
 
 <style>
-	.quiz { min-height: 100svh; max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; padding: 26px 20px 60px; }
+	.quiz-inner {
+		min-height: 100%;
+		max-width: 720px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: max(20px, env(safe-area-inset-top)) 0 20px;
+	}
 	.loading { color: var(--paper); }
 	.prompt {
-		font: clamp(1.8rem, 6vw, 3rem)/1.1 'Anton', sans-serif;
+		font: clamp(1.6rem, 6vw, 3rem)/1.1 'Anton', sans-serif;
+		font-size: min(clamp(1.6rem, 6vw, 3rem), 8vh);
 		text-transform: uppercase;
-		margin: 24px 0 8px;
+		margin: 10px 0 4px;
 	}
-	.choices { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
-	.feedback { margin-top: 20px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+	.choices { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+	.feedback { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 	.feedback .answer { margin: 0; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
-	.feedback .line { margin: 0; font-size: 1.2rem; line-height: 1.4; }
-	.feedback .button { margin-top: 4px; }
+	.feedback .line { margin: 0; font-size: 1.15rem; line-height: 1.4; }
+	.feedback .button { margin-top: 2px; width: 100%; }
+
+	@media (max-width: 620px) {
+		.quiz-inner { padding-top: max(16px, env(safe-area-inset-top)); }
+		.choices { gap: 10px; }
+	}
 </style>
+

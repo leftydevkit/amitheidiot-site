@@ -12,7 +12,24 @@
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; background: var(--ink); }
+
+html { -webkit-text-size-adjust: 100%; }
+
+/* App shell: the page itself never scrolls. `dvh` tracks mobile browser chrome
+   so fixed chrome does not jump. Overscroll is disabled (no rubber-band /
+   pull-to-refresh) so it reads as an app, not a document. */
+html, body {
+	margin: 0;
+	height: 100%;
+	background: var(--ink);
+	overflow: hidden;
+	overscroll-behavior: none;
+}
+
+body {
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+}
 
 /* Noise overlay — opacity 0.07 per Risks #12 (app-scale, not hero-scale). */
 body::before {
@@ -33,13 +50,57 @@ button { font: inherit; cursor: pointer; }
 	outline-offset: 4px;
 }
 
-.shell {
-	width: min(1120px, calc(100% - 40px));
-	margin: auto;
-	padding: 26px 0 72px;
+/* ---- App shell primitives ------------------------------------------------ */
+
+/* Every screen is exactly the viewport, laid out as a column that cannot
+   overflow at the page level. */
+.screen {
+	height: 100vh;
+	height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
-/* Chromeless by design — no header/nav on any route (§5). The wordmark appears
+/* Internal scroll region — the only place content scrolls. Used for screens
+   whose content is genuinely longer than the viewport (results, stats, …). */
+.screen-body {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
+	padding-bottom: max(28px, env(safe-area-inset-bottom));
+	scrollbar-width: thin;
+	scrollbar-color: rgba(241, 236, 224, 0.28) transparent;
+}
+.screen-body::-webkit-scrollbar { width: 6px; }
+.screen-body::-webkit-scrollbar-thumb { background: rgba(241, 236, 224, 0.28); }
+
+/* Centered, non-scrolling fill — hero screens that must fit without scroll. */
+.screen-center {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	overflow: hidden;
+}
+
+/* Width container. */
+.wrap { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+
+/* Fixed top bar (wordmark, skip, …) — never scrolls. */
+.app-bar {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding-top: max(20px, env(safe-area-inset-top));
+}
+
+/* Chromeless by design — no header/nav anywhere (§5). The wordmark appears
    only where a page explicitly renders it. */
 .wordmark {
 	font: 700 clamp(1.2rem, 4vw, 2rem)/1 'Anton', sans-serif;
@@ -81,8 +142,9 @@ button { font: inherit; cursor: pointer; }
 .button.gold { background: var(--gold); color: var(--ink); border-color: var(--gold); }
 
 .page-title {
-	margin: clamp(56px, 11vw, 120px) 0 26px;
-	font: clamp(4rem, 14vw, 10rem)/0.84 'Anton', sans-serif;
+	margin: clamp(28px, 7vh, 90px) 0 22px;
+	font: clamp(3.4rem, 13vw, 9rem)/0.84 'Anton', sans-serif;
+	font-size: min(clamp(3.4rem, 13vw, 9rem), 22vh);
 	text-transform: uppercase;
 	letter-spacing: -0.025em;
 	text-wrap: pretty;
@@ -97,7 +159,7 @@ button { font: inherit; cursor: pointer; }
 }
 
 .lede {
-	font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+	font-size: clamp(1.05rem, 2.5vw, 1.55rem);
 	max-width: 660px;
 	line-height: 1.45;
 	text-wrap: pretty;
@@ -115,9 +177,15 @@ button { font: inherit; cursor: pointer; }
 }
 
 @media (max-width: 620px) {
-	.shell { width: min(100% - 28px, 1120px); }
+	.wrap { width: min(100% - 28px, 1120px); }
 	.cards { grid-template-columns: 1fr; }
-	.page-title { font-size: clamp(3.7rem, 20vw, 7rem); }
+}
+
+/* App-like fade between screens. Neutralized by the reduced-motion block below. */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 180ms;
+	animation-timing-function: ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,5 +193,9 @@ button { font: inherit; cursor: pointer; }
 		animation-duration: 0.01ms !important;
 		transition-duration: 0.01ms !important;
 		scroll-behavior: auto !important;
+	}
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation: none !important;
 	}
 }

@@ -92,6 +92,8 @@
 		border: 2px solid var(--paper);
 		color: var(--paper);
 		font: inherit;
+		font-size: 16px; /* >=16px prevents iOS input auto-zoom */
+		min-height: 52px;
 		padding: 12px 14px;
 		margin-bottom: 16px;
 	}
@@ -99,6 +101,7 @@
 	.card-preview {
 		font-family: 'Space Grotesk', sans-serif;
 		white-space: pre-wrap;
+		word-break: break-word;
 		line-height: 1.5;
 		border: 2px solid var(--paper);
 		padding: 16px 18px;
@@ -106,4 +109,7 @@
 		background: rgba(241, 236, 224, 0.04);
 	}
 	.share-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+	@media (max-width: 620px) {
+		.share-actions .button { flex: 1 1 100%; }
+	}
 </style>

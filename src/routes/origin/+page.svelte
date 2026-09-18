@@ -48,7 +48,7 @@
 	<link rel="preload" as="image" href="/images/origin/beat-1-900.webp" fetchpriority="high" />
 </svelte:head>
 
-<main class="origin">
+<main class="screen origin">
 	<!-- Full-bleed background + scrim. All 7 rendered (tiny, ~200KB total) and
 	     crossfaded so there is never a pop-in; the active beat's layer is opaque. -->
 	{#each BEAT_IMAGE_IDS as imgId, i}
@@ -67,7 +67,7 @@
 	{/each}
 	<div class="scrim" aria-hidden="true"></div>
 
-	<div class="shell origin-inner">
+	<div class="wrap origin-inner">
 		<header class="origin-head">
 			<a class="wordmark" href="/">am<span class="accent">i</span>the<span class="blood">idiot</span></a>
 			<button class="quiet-link skip" onclick={skip}>{SKIP_LINE}</button>
@@ -96,8 +96,6 @@
 <style>
 	.origin {
 		position: relative;
-		height: 100svh;
-		overflow: hidden;
 	}
 	.origin-inner {
 		position: relative;
@@ -138,7 +136,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		padding-top: 26px;
+		padding-top: max(20px, env(safe-area-inset-top));
 	}
 	.skip {
 		background: none;
@@ -156,7 +154,7 @@
 	.progress {
 		display: flex;
 		gap: 8px;
-		padding-bottom: 40px;
+		padding-bottom: max(24px, env(safe-area-inset-bottom));
 	}
 	.progress span {
 		width: 18px;

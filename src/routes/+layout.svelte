@@ -1,6 +1,20 @@
 <script lang="ts">
 	import '$lib/app.css';
+	import { onNavigate } from '$app/navigation';
+
 	let { children } = $props();
+
+	// App-like crossfade between screens via the View Transitions API.
+	// Neutralized under prefers-reduced-motion (see app.css).
+	onNavigate((navigation) => {
+		if (typeof document === 'undefined' || !document.startViewTransition) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
 <svelte:head>
