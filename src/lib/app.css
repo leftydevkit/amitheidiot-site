@@ -167,7 +167,7 @@ button { font: inherit; cursor: pointer; }
 .card p { line-height: 1.45; }
 .meta { font-size: 0.78rem; letter-spacing: 0.04em; opacity: 0.76; }
 
-/* Greek-word display font (the idiōtēs render). */
+/* Display serif for the opening word of the lesson. */
 .greek {
 	font-family: 'GFS Didot', serif;
 }

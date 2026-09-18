@@ -26,7 +26,7 @@
 		if (perfect) {
 			return [
 				`${name} got all five right.`,
-				`${name} knows what idiōtēs actually means, and isn't one.`,
+				`${name} knows what an idiot actually is, and isn't one.`,
 				'are you?'
 			].join('\n');
 		}

@@ -23,7 +23,7 @@
 
 	<div class="screen-center">
 		<div class="wrap landing-main">
-			<p class="eyebrow">ἰδιώτης · a private citizen</p>
+			<p class="eyebrow">the word used to mean something else</p>
 			<h1 class="page-title">are you smarter<br />than an <span class="blood">idiot</span></h1>
 			<p class="lede">not the person who does not know. the person who is proud of it.</p>
 			<div class="actions">
