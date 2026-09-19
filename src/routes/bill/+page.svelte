@@ -122,7 +122,7 @@
 
 				<h2 class="sec">SECTION 5. PENALTIES AND ENFORCEMENT.</h2>
 				<p>
-					<strong>(a) First time.</strong>&mdash;A $1,776 fine.
+					<strong>(a) First time.</strong>&mdash;A $1,787 fine.
 				</p>
 				<p>
 					<strong>(b) Second time.</strong>&mdash;A criminal misdemeanour charge, a
