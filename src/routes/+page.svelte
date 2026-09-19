@@ -7,6 +7,25 @@
 	onMount(() => {
 		seen = hasSeenLesson();
 	});
+
+	// Auto-fit the hero: shrink the type until the whole page fits the viewport,
+	// so nothing is clipped on a short window. --hero-scale drives the sizes.
+	let pageEl = $state<HTMLElement>();
+
+	function fitHero() {
+		if (!pageEl) return;
+		let scale = 1;
+		pageEl.style.setProperty('--hero-scale', '1');
+		while (scale > 0.55 && pageEl.scrollHeight > pageEl.clientHeight + 1) {
+			scale = Math.round((scale - 0.03) * 100) / 100;
+			pageEl.style.setProperty('--hero-scale', String(scale));
+		}
+	}
+
+	$effect(() => {
+		void seen;
+		fitHero();
+	});
 </script>
 
 <svelte:head>
@@ -16,7 +35,7 @@
 	<meta property="og:description" content="five questions. three levels. the clock tightens as it gets harder." />
 </svelte:head>
 
-<main class="screen landing">
+<main class="screen landing" bind:this={pageEl}>
 	<header class="app-bar wrap">
 		<a class="wordmark" href="/">am<span class="accent">i</span>the<span class="blood">idiot</span></a>
 	</header>
@@ -40,14 +59,29 @@
 </main>
 
 <style>
-	.landing-main { padding: 16px 0; }
-	.landing .page-title { margin: 12px 0 16px; }
-	.landing .lede { max-width: 34ch; }
-	.actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 26px; }
+	.landing-main { padding: calc(16px * var(--hero-scale, 1)) 0; }
+	/* line-height < 1 makes Anton's caps overflow the line box and collide with
+	   the eyebrow; the top margin buys that space back. */
+	.landing .page-title {
+		font-size: calc(min(clamp(3rem, 12vw, 8rem), 19vh) * var(--hero-scale, 1));
+		line-height: 0.86;
+		margin: calc(0.16em + 6px) 0 calc(0.1em * var(--hero-scale, 1));
+	}
+	.landing .lede {
+		max-width: 34ch;
+		font-size: calc(clamp(1.05rem, 2.5vw, 1.55rem) * var(--hero-scale, 1));
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		flex-wrap: wrap;
+		margin-top: calc(26px * var(--hero-scale, 1));
+	}
 	.actions .button { flex: 0 1 auto; }
 	/* The re-entry link is a real invitation — bigger and fuller than a footer note. */
 	.actions .quiet-link {
-		font-size: 1.25rem;
+		font-size: calc(1.25rem * var(--hero-scale, 1));
 		font-weight: 500;
 		opacity: 0.92;
 		text-decoration-thickness: 2px;
@@ -67,14 +101,13 @@
 	}
 	.landing-tease b {
 		color: var(--gold);
-		font: clamp(2.8rem, 8vw, 4.5rem)/0.8 'Anton', sans-serif;
+		font: clamp(1.9rem, 4.2vw, 2.8rem)/0.8 'Anton', sans-serif;
 	}
 
 	@media (max-width: 620px) {
-		.landing .page-title { font-size: min(clamp(3rem, 15vw, 9rem), 19vh); }
-		.lede { font-size: 1.05rem; }
-		.actions { gap: 18px; margin-top: 22px; }
+		.lede { font-size: calc(1.05rem * var(--hero-scale, 1)); }
+		.actions { gap: 18px; margin-top: calc(22px * var(--hero-scale, 1)); }
 		.actions .button { flex: 1 1 100%; }
-		.actions .quiet-link { font-size: 1.15rem; }
+		.actions .quiet-link { font-size: calc(1.15rem * var(--hero-scale, 1)); }
 	}
 </style>
