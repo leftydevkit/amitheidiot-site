@@ -28,10 +28,6 @@
 
 	<div class="screen-body bill-scroll">
 		<div class="bill-paper">
-			<span class="bill-cap bill-cap--tl" aria-hidden="true"></span>
-			<span class="bill-cap bill-cap--tr" aria-hidden="true"></span>
-			<span class="bill-cap bill-cap--bl" aria-hidden="true"></span>
-			<span class="bill-cap bill-cap--br" aria-hidden="true"></span>
 			<article class="bill-doc">
 				<p class="cong">120TH CONGRESS</p>
 				<p class="cong">1ST SESSION</p>
@@ -162,153 +158,73 @@
 
 <style>
 	/* ---- the paper ------------------------------------------------------- */
-	/* The texture is one page-sized non-repeating image (see
-	   scripts/make-parchment.sh for why it is generated rather than found and
-	   why it does not tile). `100% 100%` stretches it to whatever height the
-	   document ends up, so the grain never repeats no matter how long the text
-	   runs. */
 	.bill-screen {
 		background: #0b0a08;
 	}
 
 	.bill-paper {
-		width: min(880px, 100% - 32px);
-		/* margin-inline:auto centres within the PADDING BOX of .bill-scroll,
-		   which includes the width the scrollbar is about to occupy — so the
-		   sheet landed half a scrollbar to the left of true centre (measured:
-		   off by 5px at a 10px scrollbar, and it scales with the scrollbar).
-		   `scrollbar-gutter: stable both-edges` reserves that strip on BOTH
-		   sides, so the centring box and the visible box agree and the sheet is
-		   centred on the glass. It also stops the whole page shifting sideways
-		   when the content grows past the fold. */
-		margin-block: 34px 76px;
+		width: min(920px, 100% - 32px);
+		margin-block: 40px 72px;
 		margin-inline: auto;
-		position: relative;
-		background-color: #e7dcc0;
-		background-image: url('/images/bill/parchment.webp');
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
+		--s: 0.55;
+
+		/* BORDER-IMAGE, not background: that is what lets the rollers stay
+		   their real size while the parchment stretches to whatever height the
+		   bill runs to. A plain background-size:100% 100% would squash the
+		   rollers vertically into ellipses as the text grew.
+		   Slice values are measured from the artwork (828x1056): the top roller
+		   ends at y=132, the bottom roller starts at y=922, and the parchment
+		   body runs x=145..680. `fill` is required or the middle is left empty. */
+		border-style: solid;
+		border-width: calc(132px * var(--s)) calc(148px * var(--s))
+		              calc(134px * var(--s)) calc(145px * var(--s));
+		border-image-source: url('/images/bill/scroll-bg.webp');
+		/* NO `fill`: the middle region is left empty so it takes this element's
+		   own background instead of the image's middle slice. With `fill` the
+		   790px-tall parchment slice was stretched over ~2900px (3.7x) and the
+		   artwork's staining smeared into long vertical streaks — very visible.
+		   Tiling it instead would repeat the same stains down the page. A flat
+		   wash does neither, and the two tones here are sampled straight from
+		   the artwork (upper region srgb(229,186,129), lower srgb(234,197,142))
+		   so the fill meets the image's torn edge without a seam. */
+		border-image-slice: 132 148 134 145;
+		background: linear-gradient(180deg, #e5ba81 0%, #eac48e 60%, #eecb96 100%);
+		border-image-width: calc(132px * var(--s)) calc(148px * var(--s))
+		                    calc(134px * var(--s)) calc(145px * var(--s));
+		/* stretch, not round: the parchment body is a mostly-flat wash with a
+		   little staining, so stretching it is invisible, whereas repeating it
+		   would tile the stains into an obvious pattern down a long page. */
+		border-image-repeat: stretch;
+		/* Softens the junction where the flat wash meets the image's torn edge.
+		   Without it there is a faint vertical seam: the artwork's parchment
+		   carries a little edge shading that a flat fill cannot reproduce. These
+		   are insets, so they darken the FILL side of the join and the two read
+		   as one surface. */
 		box-shadow:
-			inset 26px 0 34px -26px rgba(74, 55, 28, 0.5),
-			inset -26px 0 34px -26px rgba(74, 55, 28, 0.5),
-			inset 0 42px 46px -40px rgba(74, 55, 28, 0.45),
-			inset 0 -42px 46px -40px rgba(74, 55, 28, 0.45),
-			0 18px 48px rgba(0, 0, 0, 0.72);
+			inset 16px 0 20px -16px rgba(120, 80, 30, 0.30),
+			inset -16px 0 20px -16px rgba(120, 80, 30, 0.30);
+		position: relative;
 	}
 
 	/* Reserve the scrollbar strip on both edges so centring is honest. */
 	.bill-scroll {
 		scrollbar-gutter: stable both-edges;
+		scrollbar-color: rgba(36, 23, 8, 0.45) transparent;
 	}
-
-	/* ---- the wooden rollers ------------------------------------------------
-	   SCALE IS THE THING THAT WAS WRONG. The first version was 28px tall on an
-	   880px sheet — a 1:31 ratio. A real dowel on a document this wide is about
-	   1:11, so at 28px it read as a cocktail stick with two beads glued on, which
-	   is why it looked wrong no matter how the gradient was tuned. Now 46px and
-	   overhanging 34px a side, so it reads as a rod the paper hangs from rather
-	   than a rail the paper sits inside.
-
-	   The overhang is a fixed px on each side (negative left/right), NOT a
-	   percentage: a percentage grows absurdly wide on a large monitor and
-	   collapses to nothing on a phone, so the roller would be proportional to
-	   the screen instead of to the document.
-
-	   CAP ALIGNMENT: a cap must sit on the shaft's CENTRE-LINE, not beside it.
-	   The shaft is top:-23px with height:46px, so its centre-line is exactly at
-	   the paper's top edge (0). A 54px cap therefore needs top:-27px (half its
-	   own height), NOT -23 — using the shaft's own offset put the caps 11px high
-	   and they floated above the rod like beads on a wire. Horizontally the cap
-	   centre sits at -(overhang + C/2 - C/2 + 4) = -65px: at -61 the cap's inner
-	   edge lands exactly flush with the shaft's end and reads as a separate disc
-	   abutting it, so it is pushed 4px further out to actually cap the rod. */
-	.bill-paper::before,
-	.bill-paper::after {
-		content: '';
-		position: absolute;
-		left: -34px;
-		right: -34px;
-		height: 46px;
-		border-radius: 23px;
-		background-image:
-			/* lighting: dark top edge, specular above centre, long falloff */
-			linear-gradient(
-				180deg,
-				rgba(24, 13, 6, 0.85) 0%,
-				rgba(58, 34, 15, 0.55) 9%,
-				rgba(122, 80, 40, 0.2) 20%,
-				rgba(238, 202, 148, 0.5) 33%,
-				rgba(212, 168, 110, 0.34) 44%,
-				rgba(150, 104, 56, 0.3) 60%,
-				rgba(74, 46, 20, 0.55) 80%,
-				rgba(26, 14, 6, 0.85) 100%
-			),
-			/* grain along the shaft, fine and irregular */
-			repeating-linear-gradient(
-				90deg,
-				rgba(255, 226, 178, 0.055) 0px,
-				rgba(46, 26, 11, 0.06) 2px,
-				rgba(255, 226, 178, 0.03) 5px,
-				rgba(46, 26, 11, 0.05) 8px,
-				rgba(255, 226, 178, 0.045) 11px
-			),
-			/* base wood tone across the length */
-			linear-gradient(90deg, #4a2d14 0%, #8a5c2e 8%, #7a5128 26%, #9c6b38 50%, #7a5128 74%, #8a5c2e 92%, #4a2d14 100%);
-		box-shadow:
-			inset 0 2px 2px rgba(255, 236, 200, 0.16),
-			inset 0 -3px 5px rgba(0, 0, 0, 0.5),
-			0 10px 22px rgba(0, 0, 0, 0.8);
-		z-index: 2;
-	}
-	.bill-paper::before { top: -23px; }
-	.bill-paper::after { bottom: -23px; }
-
-	/* Cut end grain. Centred on the shaft's end (see the alignment note above),
-	   and shaded from the same warm mid-tone so the two join rather than
-	   looking assembled: 54px across against a 46px shaft, so the cap slightly
-	   foreshortens the rod exactly as a turned dowel's face does. */
-	.bill-cap {
-		position: absolute;
-		width: 54px;
-		height: 54px;
-		border-radius: 50%;
-		z-index: 3;
-		pointer-events: none;
-		background:
-			radial-gradient(
-				circle at 36% 30%,
-				#e2bd8a 0%,
-				#c1914f 22%,
-				#9a6c34 46%,
-				#6b4622 70%,
-				#3b2310 100%
-			);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 228, 184, 0.16),
-			inset 0 -3px 6px rgba(0, 0, 0, 0.45),
-			0 8px 18px rgba(0, 0, 0, 0.75);
-	}
-	.bill-cap--tl { top: -27px; left: -65px; }
-	.bill-cap--tr { top: -27px; right: -65px; }
-	.bill-cap--bl { bottom: -27px; left: -65px; }
-	.bill-cap--br { bottom: -27px; right: -65px; }
+	.bill-scroll::-webkit-scrollbar-thumb { background: rgba(36, 23, 8, 0.45); }
 
 	@media (max-width: 620px) {
-		.bill-paper::before,
-		.bill-paper::after { height: 30px; border-radius: 15px; left: -20px; right: -20px; }
-		.bill-paper::before { top: -15px; }
-		.bill-paper::after { bottom: -15px; }
-		.bill-cap { width: 36px; height: 36px; }
-		.bill-cap--tl { top: -18px; left: -38px; }
-		.bill-cap--tr { top: -18px; right: -38px; }
-		.bill-cap--bl { bottom: -18px; left: -38px; }
-		.bill-cap--br { bottom: -18px; right: -38px; }
+		.bill-paper { width: calc(100% - 16px); --s: 0.30; margin-block: 24px 48px; }
 	}
 
 	/* ---- the document ---------------------------------------------------- */
 	.bill-doc {
 		position: relative;
-		padding: clamp(46px, 7vw, 84px) clamp(28px, 8vw, 88px) clamp(56px, 8vw, 96px);
+		/* The torn parchment edge and the rollers are drawn by the border now,
+		   so this is only the breathing room BETWEEN the ink and that edge —
+		   not the page margin, which is what the old 88px side padding was
+		   standing in for. Kept small on purpose so the text stays large. */
+		padding: clamp(10px, 2vw, 26px) clamp(6px, 1.5vw, 18px) clamp(24px, 4vw, 52px);
 		color: #241708;
 		font-family: 'Times New Roman', Times, Georgia, serif;
 		font-size: clamp(1.12rem, 1.9vw, 1.34rem);
@@ -386,13 +302,4 @@
 	}
 	.bill-doc > p.stamp { display: block; width: fit-content; margin-inline: auto; }
 
-	@media (max-width: 620px) {
-		.bill-paper { width: calc(100% - 20px); margin: 20px auto 44px; }
-		.bill-doc { font-size: 1.1rem; }
-	}
-
-	/* The paper is a fixed light colour while the rest of the site is dark, so
-	   the scrollbar needs to stay visible against it. */
-	.bill-scroll { scrollbar-color: rgba(36, 23, 8, 0.45) transparent; }
-	.bill-scroll::-webkit-scrollbar-thumb { background: rgba(36, 23, 8, 0.45); }
 </style>
