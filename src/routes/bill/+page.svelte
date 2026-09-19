@@ -15,8 +15,8 @@
 </script>
 
 <svelte:head>
-	<title>H.R. ____ — Public Affiliation and Uniformity Disclosure Act</title>
-	<meta name="description" content="A bill before the 120th Congress." />
+	<title>H.R. 1 — Public Affiliation and Uniformity Disclosure Act</title>
+	<meta name="description" content="H.R. 1 — a bill before the 120th Congress." />
 	<!-- Deliberately unindexed: this page is share-by-link only. -->
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
@@ -35,7 +35,12 @@
 			<article class="bill-doc">
 				<p class="cong">120TH CONGRESS</p>
 				<p class="cong">1ST SESSION</p>
-				<p class="hr">H. R. ____</p>
+								<!-- H.R. 1 is the number a Congress RESERVES for the first bill
+				     introduced and the majority leadership's top priority — it is not
+				     a placeholder, it is the most prominent slot on the calendar. Left
+				     as the real designation so the page reads as the flagship, not as
+				     a draft waiting for a number. -->
+				<p class="hr">H. R. 1</p>
 
 				<p class="purpose">
 					To establish public identification requirements for designated political
@@ -167,99 +172,137 @@
 	}
 
 	.bill-paper {
-		width: min(880px, calc(100% - 32px));
-		margin: 28px auto 64px;
+		width: min(880px, 100% - 32px);
+		/* margin-inline:auto centres within the PADDING BOX of .bill-scroll,
+		   which includes the width the scrollbar is about to occupy — so the
+		   sheet landed half a scrollbar to the left of true centre (measured:
+		   off by 5px at a 10px scrollbar, and it scales with the scrollbar).
+		   `scrollbar-gutter: stable both-edges` reserves that strip on BOTH
+		   sides, so the centring box and the visible box agree and the sheet is
+		   centred on the glass. It also stops the whole page shifting sideways
+		   when the content grows past the fold. */
+		margin-block: 34px 76px;
+		margin-inline: auto;
 		position: relative;
 		background-color: #e7dcc0;
 		background-image: url('/images/bill/parchment.webp');
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
 		box-shadow:
-			/* inner shading down each long edge, so the sheet curves away */
 			inset 26px 0 34px -26px rgba(74, 55, 28, 0.5),
 			inset -26px 0 34px -26px rgba(74, 55, 28, 0.5),
-			/* aged, slightly darker top and bottom margins */
 			inset 0 42px 46px -40px rgba(74, 55, 28, 0.45),
 			inset 0 -42px 46px -40px rgba(74, 55, 28, 0.45),
-			/* separation from the black ground */
 			0 18px 48px rgba(0, 0, 0, 0.72);
 	}
 
-	/* Wooden rollers.
-	   A cylinder needs an ASYMMETRIC highlight: a narrow, bright specular band
-	   ABOVE the vertical centre, a broad soft falloff below it, and dark edges
-	   top and bottom. The first version put a symmetric three-stop ramp at 25/50/75
-	   which produced a flat metallic stripe — a painted band, not a turned dowel.
-	   These stops are placed off-centre (bright at 38%, mid-falloff at 52-70%) to
-	   sell the curvature, and the grain runs along the shaft as a repeat-x
-	   gradient so it does not read as injection-moulded plastic. */
+	/* Reserve the scrollbar strip on both edges so centring is honest. */
+	.bill-scroll {
+		scrollbar-gutter: stable both-edges;
+	}
+
+	/* ---- the wooden rollers ------------------------------------------------
+	   SCALE IS THE THING THAT WAS WRONG. The first version was 28px tall on an
+	   880px sheet — a 1:31 ratio. A real dowel on a document this wide is about
+	   1:11, so at 28px it read as a cocktail stick with two beads glued on, which
+	   is why it looked wrong no matter how the gradient was tuned. Now 46px and
+	   overhanging 34px a side, so it reads as a rod the paper hangs from rather
+	   than a rail the paper sits inside.
+
+	   The overhang is a fixed px on each side (negative left/right), NOT a
+	   percentage: a percentage grows absurdly wide on a large monitor and
+	   collapses to nothing on a phone, so the roller would be proportional to
+	   the screen instead of to the document.
+
+	   CAP ALIGNMENT: a cap must sit on the shaft's CENTRE-LINE, not beside it.
+	   The shaft is top:-23px with height:46px, so its centre-line is exactly at
+	   the paper's top edge (0). A 54px cap therefore needs top:-27px (half its
+	   own height), NOT -23 — using the shaft's own offset put the caps 11px high
+	   and they floated above the rod like beads on a wire. Horizontally the cap
+	   centre sits at -(overhang + C/2 - C/2 + 4) = -65px: at -61 the cap's inner
+	   edge lands exactly flush with the shaft's end and reads as a separate disc
+	   abutting it, so it is pushed 4px further out to actually cap the rod. */
 	.bill-paper::before,
 	.bill-paper::after {
 		content: '';
 		position: absolute;
-		left: -3%;
-		right: -3%;
-		height: 28px;
-		border-radius: 14px;
+		left: -34px;
+		right: -34px;
+		height: 46px;
+		border-radius: 23px;
 		background-image:
-			/* the specular band */
+			/* lighting: dark top edge, specular above centre, long falloff */
 			linear-gradient(
 				180deg,
-				rgba(0, 0, 0, 0.66) 0%,
-				rgba(70, 42, 18, 0.35) 12%,
-				rgba(150, 100, 52, 0.1) 26%,
-				rgba(236, 196, 138, 0.42) 38%,
-				rgba(176, 126, 70, 0.16) 50%,
-				rgba(92, 58, 26, 0.34) 70%,
-				rgba(28, 16, 8, 0.72) 100%
+				rgba(24, 13, 6, 0.85) 0%,
+				rgba(58, 34, 15, 0.55) 9%,
+				rgba(122, 80, 40, 0.2) 20%,
+				rgba(238, 202, 148, 0.5) 33%,
+				rgba(212, 168, 110, 0.34) 44%,
+				rgba(150, 104, 56, 0.3) 60%,
+				rgba(74, 46, 20, 0.55) 80%,
+				rgba(26, 14, 6, 0.85) 100%
 			),
-			/* longitudinal grain */
+			/* grain along the shaft, fine and irregular */
 			repeating-linear-gradient(
 				90deg,
-				rgba(255, 224, 176, 0.05) 0px,
-				rgba(0, 0, 0, 0.05) 3px,
-				rgba(255, 224, 176, 0.03) 6px,
-				rgba(0, 0, 0, 0.04) 9px
+				rgba(255, 226, 178, 0.055) 0px,
+				rgba(46, 26, 11, 0.06) 2px,
+				rgba(255, 226, 178, 0.03) 5px,
+				rgba(46, 26, 11, 0.05) 8px,
+				rgba(255, 226, 178, 0.045) 11px
 			),
-			linear-gradient(90deg, #3a2411 0%, #9a6a38 12%, #6d4722 34%, #a87a44 52%, #6d4722 72%, #9a6a38 88%, #3a2411 100%);
+			/* base wood tone across the length */
+			linear-gradient(90deg, #4a2d14 0%, #8a5c2e 8%, #7a5128 26%, #9c6b38 50%, #7a5128 74%, #8a5c2e 92%, #4a2d14 100%);
 		box-shadow:
-			inset 0 1px 0 rgba(255, 232, 190, 0.28),
-			inset 0 -2px 3px rgba(0, 0, 0, 0.55),
-			0 6px 16px rgba(0, 0, 0, 0.75);
+			inset 0 2px 2px rgba(255, 236, 200, 0.16),
+			inset 0 -3px 5px rgba(0, 0, 0, 0.5),
+			0 10px 22px rgba(0, 0, 0, 0.8);
 		z-index: 2;
 	}
-	.bill-paper::before { top: -14px; }
-	.bill-paper::after { bottom: -14px; }
+	.bill-paper::before { top: -23px; }
+	.bill-paper::after { bottom: -23px; }
 
-	/* End caps: a small circle at each end of each roller, so the dowel reads as
-	   having a cut face rather than being a floating rounded rectangle. */
+	/* Cut end grain. Centred on the shaft's end (see the alignment note above),
+	   and shaded from the same warm mid-tone so the two join rather than
+	   looking assembled: 54px across against a 46px shaft, so the cap slightly
+	   foreshortens the rod exactly as a turned dowel's face does. */
 	.bill-cap {
 		position: absolute;
-		width: 30px;
-		height: 30px;
+		width: 54px;
+		height: 54px;
 		border-radius: 50%;
 		z-index: 3;
 		pointer-events: none;
-		background: radial-gradient(
-			circle at 38% 34%,
-			#e8c48c 0%,
-			#b8874e 34%,
-			#7a5228 62%,
-			#3d2612 100%
-		);
+		background:
+			radial-gradient(
+				circle at 36% 30%,
+				#e2bd8a 0%,
+				#c1914f 22%,
+				#9a6c34 46%,
+				#6b4622 70%,
+				#3b2310 100%
+			);
 		box-shadow:
-			inset 0 0 0 1px rgba(255, 226, 178, 0.22),
-			0 5px 12px rgba(0, 0, 0, 0.7);
+			inset 0 0 0 1px rgba(255, 228, 184, 0.16),
+			inset 0 -3px 6px rgba(0, 0, 0, 0.45),
+			0 8px 18px rgba(0, 0, 0, 0.75);
 	}
-	.bill-cap--tl { top: -15px; left: -4.2%; }
-	.bill-cap--tr { top: -15px; right: -4.2%; }
-	.bill-cap--bl { bottom: -15px; left: -4.2%; }
-	.bill-cap--br { bottom: -15px; right: -4.2%; }
+	.bill-cap--tl { top: -27px; left: -65px; }
+	.bill-cap--tr { top: -27px; right: -65px; }
+	.bill-cap--bl { bottom: -27px; left: -65px; }
+	.bill-cap--br { bottom: -27px; right: -65px; }
 
 	@media (max-width: 620px) {
-		.bill-cap { width: 24px; height: 24px; }
-		.bill-cap--tl, .bill-cap--tr { top: -12px; }
-		.bill-cap--bl, .bill-cap--br { bottom: -12px; }
+		.bill-paper::before,
+		.bill-paper::after { height: 30px; border-radius: 15px; left: -20px; right: -20px; }
+		.bill-paper::before { top: -15px; }
+		.bill-paper::after { bottom: -15px; }
+		.bill-cap { width: 36px; height: 36px; }
+		.bill-cap--tl { top: -18px; left: -38px; }
+		.bill-cap--tr { top: -18px; right: -38px; }
+		.bill-cap--bl { bottom: -18px; left: -38px; }
+		.bill-cap--br { bottom: -18px; right: -38px; }
 	}
 
 	/* ---- the document ---------------------------------------------------- */
