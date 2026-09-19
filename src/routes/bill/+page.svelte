@@ -109,7 +109,13 @@
 					places, and anywhere else the general public is allowed.
 				</p>
 				<p>
-					<strong>(c) No exceptions.</strong>&mdash;Not for weather. Not for work. Not
+					<strong>(c) The yard sign.</strong>&mdash;A triple trumper must also display a
+					sign on the front lawn, or at the public entrance of their home, facing the
+					street and large enough to be read from the sidewalk. The sign must identify
+					them as a triple trumper and must stay up at all times.
+				</p>
+				<p>
+					<strong>(d) No exceptions.</strong>&mdash;Not for weather. Not for work. Not
 					for a medical condition. Not for religious reasons. Not even when their own
 					children are with them.
 				</p>
@@ -138,8 +144,12 @@
 					who can demand ID to check.
 				</p>
 				<p>
-					<strong>(f) Public list.</strong>&mdash;The Secretary publishes a public list
-					every three months of everyone found breaking this law.
+					<strong>(f) The PATRIOT Registry.</strong>&mdash;The Secretary maintains a
+					public registry called the PATRIOT Registry &mdash; the <strong>P</strong>ublic
+					<strong>A</strong>ffiliation <strong>T</strong>racking,
+					<strong>R</strong>egistration, and <strong>I</strong>dentification
+					<strong>O</strong>f <strong>T</strong>rumpers. It lists everyone found
+					breaking this law, and the Secretary publishes it every three months.
 				</p>
 
 				<h2 class="sec">SECTION 6. SEVERABILITY.</h2>
