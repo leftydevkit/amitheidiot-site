@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { hasSeenLesson } from '$lib/gates';
-	import { LANDING_TEASER, REENTRY_LINK } from '$lib/data';
+	import { REENTRY_LINK } from '$lib/data';
 
 	let seen = $state(false);
 	onMount(() => {
@@ -32,11 +32,6 @@
 			</div>
 		</div>
 	</div>
-
-	<footer class="landing-tease wrap">
-		<b>35%</b>
-		<span>{LANDING_TEASER}</span>
-	</footer>
 </main>
 
 <style>
@@ -53,19 +48,6 @@
 		text-decoration-thickness: 2px;
 		text-underline-offset: 6px;
 	}
-
-	.landing-tease {
-		flex: 0 0 auto;
-		display: grid;
-		grid-template-columns: auto 1fr;
-		gap: 16px;
-		align-items: baseline;
-		border-top: 2px solid var(--paper);
-		padding: 14px 0 max(18px, env(safe-area-inset-bottom));
-		font-size: 0.85rem;
-		line-height: 1.35;
-	}
-	.landing-tease b { color: var(--gold); font: 2.2rem/0.8 'Anton', sans-serif; }
 
 	@media (max-width: 620px) {
 		.landing .page-title { font-size: min(clamp(3rem, 15vw, 9rem), 19vh); }
