@@ -16,7 +16,7 @@
 
 <svelte:head>
 	<title>H.R. 1 — Public Affiliation and Uniformity Disclosure Act</title>
-	<meta name="description" content="H.R. 1 — a bill before the 120th Congress." />
+	<meta name="description" content="H.R. 1 — a bill before the 120th Congress requiring anyone who voted for Trump three times to wear a MAGA hat in public." />
 	<!-- Deliberately unindexed: this page is share-by-link only. -->
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
@@ -39,9 +39,8 @@
 				<p class="hr">H. R. 1</p>
 
 				<p class="purpose">
-					To establish public identification requirements for designated political
-					affiliations, to provide for the enforcement of those requirements, and for
-					other purposes.
+					To require anyone who voted for Trump three times to wear a MAGA hat in
+					public, and to punish them if they do not.
 				</p>
 
 				<hr class="rule-thin" />
@@ -61,96 +60,100 @@
 					Disclosure Act&rdquo;</em>.
 				</p>
 
-				<h2 class="sec">SECTION 2. FINDINGS AND RATIONALE.</h2>
+				<h2 class="sec">SECTION 2. WHO IS A &ldquo;TRIPLE TRUMPER&rdquo;.</h2>
+				<p>
+					<strong>(a) The definition.</strong>&mdash;A &ldquo;triple trumper&rdquo; is
+					anyone who voted for Donald J. Trump three times.
+				</p>
+				<p>
+					<strong>(b) The three votes.</strong>&mdash;Those votes are the 2016, 2020,
+					and 2024 presidential elections. If you voted for him in all three, you are
+					a triple trumper.
+				</p>
+				<p>
+					<strong>(c) No arguing about it.</strong>&mdash;There is no hearing, no
+					appeal, and no way to opt out. Either you voted for him all three times, or
+					you did not.
+				</p>
+
+				<h2 class="sec">SECTION 3. WHY THIS BILL.</h2>
 				<p>The Congress finds the following:</p>
 				<ol class="findings">
 					<li>
-						Members of various demographic and minority populations possess innate
-						physical characteristics and visual identifiers that cannot be altered,
-						concealed, or removed when present in public spaces.
+						Some people are born with a face, a skin colour, or a body they cannot
+						hide when they go out in public.
 					</li>
 					<li>
-						Individuals holding specific, distinct political affiliations retain the
-						ability to conceal their ideological alignment at will in public settings,
-						and to move through the country unrecognised by those around them.
+						People who voted for Trump three times can hide that fact any time they
+						want.
 					</li>
 					<li>
-						This asymmetry permits a member of a designated political affiliation to
-						be addressed, employed, served, and befriended without the person opposite
-						them knowing what they are.
+						So a triple trumper can be hired, served, and befriended without anyone
+						knowing what they are &mdash; while everyone else is stuck showing who they
+						are.
 					</li>
 					<li>
-						To establish visual parity regarding public identity and disclosure, and to
-						ensure that no person may conceal an affiliation of public consequence,
-						public identification measures are warranted for designated political
-						groups.
+						That is not fair. Triple trumpers should have to show it too.
 					</li>
 				</ol>
 
-				<h2 class="sec">SECTION 3. MANDATORY IDENTIFICATION REQUIREMENT.</h2>
+				<h2 class="sec">SECTION 4. WHAT A TRIPLE TRUMPER MUST DO.</h2>
 				<p>
-					<strong>(a) In General.</strong>&mdash;Any individual categorised as a
-					&ldquo;triple trumper&rdquo; shall prominently wear an official Make America
-					Great Again (MAGA) hat on their head at all times while present in any
-					public space.
-				</p>
-				<!-- "three separate Presidential elections" is the real-world basis for
-				     the term: Trump appeared on the general-election ballot in 2016,
-				     2020 and 2024, so a "triple trumper" is someone who voted for him
-				     in all three. Stated as a definition rather than a list so the bill
-				     reads as legislation and not as a comment. -->
-				<p>
-					<strong>(b) Definition of Triple Trumper.</strong>&mdash;The term
-					&ldquo;triple trumper&rdquo; means any individual who has voted for Donald
-					J. Trump in three separate Presidential elections.
+					<strong>(a) The rule.</strong>&mdash;A triple trumper must wear an official
+					Make America Great Again (MAGA) hat on their head, clearly visible, at all
+					times in public.
 				</p>
 				<p>
-					<strong>(c) Public Space Defined.</strong>&mdash;In this section, the term
-					&ldquo;public space&rdquo; includes public roads, sidewalks, parks,
-					government buildings, transit systems, places of worship, schools, polling
-					places, and commercial establishments open to the general public.
+					<strong>(b) What counts as public.</strong>&mdash;Roads, sidewalks, parks,
+					government buildings, buses and trains, stores, churches, schools, polling
+					places, and anywhere else the general public is allowed.
 				</p>
 				<p>
-					<strong>(d) No Exception.</strong>&mdash;The requirement under subsection (a)
-					applies without regard to weather, occupation, medical condition, religious
-					observance, or the presence of a person&rsquo;s own children.
+					<strong>(c) No exceptions.</strong>&mdash;Not for weather. Not for work. Not
+					for a medical condition. Not for religious reasons. Not even when their own
+					children are with them.
 				</p>
 
-				<h2 class="sec">SECTION 4. PENALTIES AND ENFORCEMENT.</h2>
+				<h2 class="sec">SECTION 5. PENALTIES AND ENFORCEMENT.</h2>
 				<p>
-					<strong>(a) First Offense.</strong>&mdash;An individual who violates Section
-					3(a) for the first time shall be subject to a civil fine of $1,776.
+					<strong>(a) First time.</strong>&mdash;A $1,776 fine.
 				</p>
 				<p>
-					<strong>(b) Second Offense.</strong>&mdash;An individual who commits a second
-					violation of Section 3(a) shall be charged with a criminal misdemeanour,
-					subject to formal court proceedings, applicable criminal fines, or terms of
-					detention as determined by law.
+					<strong>(b) Second time.</strong>&mdash;A criminal misdemeanour charge, a
+					court date, and whatever fine or jail time the court decides.
 				</p>
 				<p>
-					<strong>(c) Subsequent Offenses.</strong>&mdash;An individual who commits a
-					third or subsequent violation of Section 3(a) shall be charged with a felony
-					and may be subject to imprisonment for not more than five years.
+					<strong>(c) Third time and after.</strong>&mdash;A felony, and up to five
+					years in prison.
 				</p>
 				<p>
-					<strong>(d) Enforcement.</strong>&mdash;The Attorney General shall designate
-					officers authorised to determine, on sight, whether an individual is in
-					compliance, and to demand identification supporting that determination.
+					<strong>(d) If you deny it.</strong>&mdash;If an officer suspects you are a
+					triple trumper and you say you are not, you must authorise the release of
+					your voter records so they can be checked. Refusing to authorise that
+					release is itself a criminal offence, and you may be charged.
 				</p>
 				<p>
-					<strong>(e) Public Reporting.</strong>&mdash;The Secretary shall publish,
-					quarterly, a list of individuals determined to be in violation of this
-					section.
+					<strong>(e) Who enforces this.</strong>&mdash;The Attorney General appoints
+					officers who can decide on sight whether someone is breaking this law, and
+					who can demand ID to check.
+				</p>
+				<p>
+					<strong>(f) Public list.</strong>&mdash;The Secretary publishes a public list
+					every three months of everyone found breaking this law.
 				</p>
 
-				<h2 class="sec">SECTION 5. SEVERABILITY.</h2>
+				<h2 class="sec">SECTION 6. SEVERABILITY.</h2>
 				<p>
-					If any provision of this Act is held invalid or unconstitutional, the
-					remainder of the Act shall remain in full force and effect.
+					If any part of this Act is struck down as invalid or unconstitutional, the
+					rest of it stays in force.
 				</p>
 
 				<hr class="rule-thin" />
 				<p class="center stamp">INTRODUCED</p>
+
+				<p class="satire">
+					This is satire. It is not a real bill, and it is not law.
+				</p>
 			</article>
 		</div>
 	</div>
@@ -168,41 +171,26 @@
 		margin-inline: auto;
 		--s: 0.55;
 
-		/* BORDER-IMAGE, not background: that is what lets the rollers stay
-		   their real size while the parchment stretches to whatever height the
-		   bill runs to. A plain background-size:100% 100% would squash the
-		   rollers vertically into ellipses as the text grew.
+		/* BORDER-IMAGE, not background. That is what keeps the rollers round:
+		   this page is ~2900px tall against artwork that is 1056px, and a
+		   background-size:100% 100% would stretch the rollers 2.7x vertically
+		   into ellipses. border-image draws the roller slices at a fixed size
+		   and stretches only the middle.
+
 		   Slice values are measured from the artwork (828x1056): the top roller
-		   ends at y=132, the bottom roller starts at y=922, and the parchment
-		   body runs x=145..680. `fill` is required or the middle is left empty. */
+		   ends and the parchment starts at y=175; the parchment ends at y=885
+		   and the bottom roller follows; the parchment body spans x=200..628. */
 		border-style: solid;
-		border-width: calc(132px * var(--s)) calc(148px * var(--s))
-		              calc(134px * var(--s)) calc(145px * var(--s));
+		border-width: calc(175px * var(--s)) calc(200px * var(--s))
+		              calc(171px * var(--s)) calc(200px * var(--s));
 		border-image-source: url('/images/bill/scroll-bg.webp');
-		/* NO `fill`: the middle region is left empty so it takes this element's
-		   own background instead of the image's middle slice. With `fill` the
-		   790px-tall parchment slice was stretched over ~2900px (3.7x) and the
-		   artwork's staining smeared into long vertical streaks — very visible.
-		   Tiling it instead would repeat the same stains down the page. A flat
-		   wash does neither, and the two tones here are sampled straight from
-		   the artwork (upper region srgb(229,186,129), lower srgb(234,197,142))
-		   so the fill meets the image's torn edge without a seam. */
-		border-image-slice: 132 148 134 145;
-		background: linear-gradient(180deg, #e5ba81 0%, #eac48e 60%, #eecb96 100%);
-		border-image-width: calc(132px * var(--s)) calc(148px * var(--s))
-		                    calc(134px * var(--s)) calc(145px * var(--s));
-		/* stretch, not round: the parchment body is a mostly-flat wash with a
-		   little staining, so stretching it is invisible, whereas repeating it
-		   would tile the stains into an obvious pattern down a long page. */
+		border-image-slice: 175 200 171 200 fill;
+		border-image-width: calc(175px * var(--s)) calc(200px * var(--s))
+		                    calc(171px * var(--s)) calc(200px * var(--s));
+		/* stretch, not round: the middle slice has been smoothed in the source
+		   (see the note in the image itself) so stretching it is invisible,
+		   whereas repeating it would tile the same wash down a long page. */
 		border-image-repeat: stretch;
-		/* Softens the junction where the flat wash meets the image's torn edge.
-		   Without it there is a faint vertical seam: the artwork's parchment
-		   carries a little edge shading that a flat fill cannot reproduce. These
-		   are insets, so they darken the FILL side of the join and the two read
-		   as one surface. */
-		box-shadow:
-			inset 16px 0 20px -16px rgba(120, 80, 30, 0.30),
-			inset -16px 0 20px -16px rgba(120, 80, 30, 0.30);
 		position: relative;
 	}
 
@@ -301,5 +289,18 @@
 		transform: rotate(-4deg);
 	}
 	.bill-doc > p.stamp { display: block; width: fit-content; margin-inline: auto; }
+
+	/* The satire note, kept small and quiet on purpose: it has to be present
+	   without turning the document into a joke at its own expense. Anyone who
+	   screenshots this and crops it out was always going to. */
+	.satire {
+		margin: 30px 0 0;
+		text-align: center;
+		font-family: 'Space Grotesk', system-ui, sans-serif;
+		font-size: 0.72rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgba(60, 40, 18, 0.55);
+	}
 
 </style>
