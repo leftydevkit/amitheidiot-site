@@ -158,9 +158,9 @@ export interface Beat {
 
 export const LESSON_BEATS: Beat[] = [
 	{ lines: ['idiot.', 'we have it backwards.', 'it never named the man who didn\'t know.', 'it named the man who didn\'t show up.'] },
-	{ lines: ['he kept his gate shut.', 'blinds down, porch light off, nothing in the flag bracket.', 'he didn\'t vote. he didn\'t serve. he didn\'t show up.', 'he tended his own yard, and nothing else.'], emphatic: 0 },
-	{ lines: ['here\'s the part almost everyone gets wrong.', 'they did not think this man was stupid.', 'he knew exactly what was on the agenda. he could have walked you through it, in detail.', 'he just didn\'t care to be there.'] },
-	{ lines: ['and the country did not find it quaint.', 'a republic runs on the people who show up — who vote, who serve, who pay attention when it\'s boring.', 'he took the protection and gave nothing back.', 'that was never a personality type. that was a citizen in name only.'], emphatic: 2 },
+	{ lines: ['the idiot kept his gate shut.', 'blinds down, porch light off, nothing in the flag bracket.', 'didn\'t vote. didn\'t serve. didn\'t show up.', 'tended his own yard, and nothing else.'], emphatic: 0 },
+	{ lines: ['here\'s the part almost everyone gets wrong.', 'they did not think the idiot was stupid.', 'the idiot knew exactly what was on the agenda — could have walked you through it, in detail.', 'just didn\'t care to be there.'] },
+	{ lines: ['and the country did not find it quaint.', 'a republic runs on the people who show up — who vote, who serve, who pay attention when it\'s boring.', 'the idiot took the protection and gave nothing back.', 'that was never a personality type. that was a citizen in name only.'], emphatic: 2 },
 	{ lines: ['so the word drifted. it always does.', 'showing up got cheaper to skip — fewer meetings to sit through, fewer consequences for not knowing.', 'from the man who wouldn\'t participate, to the man who didn\'t know, to the man who plainly didn\'t care to.', 'same contempt. softer target.'] },
 	{ lines: ['which brings us to now.', 'the modern american idiot is not the citizen who doesn\'t know the answer.', 'it\'s the citizen who is certain of it, wrong about it, and completely unbothered by either fact.'], emphatic: 2 },
 	{ lines: ['you\'re about to find out which one you are.'], cta: true }
