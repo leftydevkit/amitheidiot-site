@@ -240,3 +240,7 @@ export const PEP_TALK: string[] = [
 	'you didn\'t have to get a perfect score today. nobody hands you this knowledge at birth — you have to go get it, and most people don\'t, and that\'s a fixable problem, not a character flaw. it is not too late, and it is not hard. read one more thing. ask one more question. show up once more than you were planning to. that\'s the whole job. that\'s always been the whole job.'
 ];
 
+// §2.7 — landing teaser line. The figure renders separately (big, gold), so this
+// sentence must not repeat it.
+export const LANDING_TEASER = 'of americans can\'t name all three branches of government. the rest of the numbers are worse. see them after you play.';
+
