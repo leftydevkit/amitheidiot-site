@@ -49,6 +49,17 @@
 				<a class="button" href={seen ? '/quiz' : '/origin'}>{seen ? 'take the quiz' : 'begin'}</a>
 				<a class="quiet-link" href="/origin">{REENTRY_LINK}</a>
 			</div>
+
+			<figure class="hero-figure" aria-hidden="true">
+				<img
+					src="/images/home/stupid-thinker-900.webp"
+					srcset="/images/home/stupid-thinker-600.webp 600w, /images/home/stupid-thinker-900.webp 900w, /images/home/stupid-thinker-1366.webp 1366w"
+					sizes="(min-width: 1024px) min(42vw, 620px), min(72vw, 440px)"
+					width="900"
+					height="638"
+					alt=""
+				/>
+			</figure>
 		</div>
 	</div>
 
@@ -59,6 +70,44 @@
 </main>
 
 <style>
+	/* The figure is the anchor of the hero, so it appears at every width. Narrow
+	   screens have no dead space beside the copy, so it sits in the flow, centered
+	   under the copy block. It is scaled by --hero-scale — same knob as the type —
+	   so fitHero() can shrink it along with everything else instead of letting it
+	   push the page past the viewport. Mirrored and knocked out of its ground by
+	   scripts/process-home-figure.sh. */
+	.landing-main { position: relative; }
+	.hero-figure {
+		width: calc(min(72vw, 440px) * var(--hero-scale, 1));
+		margin: calc(22px * var(--hero-scale, 1)) auto 0;
+		pointer-events: none;
+	}
+	.hero-figure img {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 34vh;
+		object-fit: contain;
+		margin-inline: auto;
+	}
+
+	/* Wide screens: the wrap is capped at 1120px and the copy only fills its left
+	   half, leaving real dead space on the right. Float him into it as a second
+	   column. Out of flow on purpose: a flex child here would stretch .actions to
+	   full width (align-self:stretch is the default), shoving the button's right
+	   border out to the wrap edge. bottom:0 is the column's content-box bottom,
+	   flush with the button's border until .landing-main's padding pushes it past. */
+	@media (min-width: 1024px) {
+		.hero-figure {
+			position: absolute;
+			bottom: calc(16px * var(--hero-scale, 1));
+			right: 0;
+			width: min(42vw, 620px);
+			margin: 0;
+		}
+		.hero-figure img { max-height: 66vh; }
+	}
+
 	.landing-main { padding: calc(16px * var(--hero-scale, 1)) 0; }
 	/* line-height < 1 makes Anton's caps overflow the line box and collide with
 	   the eyebrow; the top margin buys that space back. */
