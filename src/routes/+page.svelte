@@ -35,14 +35,19 @@
 	// Auto-fit the hero: shrink the type until the whole page fits the viewport,
 	// so nothing is clipped on a short window. --hero-scale drives the sizes.
 	let pageEl = $state<HTMLElement>();
+	let mainEl = $state<HTMLElement>();
 
 	function fitHero() {
-		if (!pageEl) return;
+		// The hero overflows inside .landing-main (the figure hangs below it), not
+		// on <main>, so measure the inner block — otherwise nothing shrinks and the
+		// figure (and its anthill) clips on short phones.
+		const el = mainEl ?? pageEl;
+		if (!el) return;
 		let scale = 1;
-		pageEl.style.setProperty('--hero-scale', '1');
-		while (scale > 0.55 && pageEl.scrollHeight > pageEl.clientHeight + 1) {
+		el.style.setProperty('--hero-scale', '1');
+		while (scale > 0.55 && el.scrollHeight > el.clientHeight + 1) {
 			scale = Math.round((scale - 0.03) * 100) / 100;
-			pageEl.style.setProperty('--hero-scale', String(scale));
+			el.style.setProperty('--hero-scale', String(scale));
 		}
 	}
 
@@ -65,7 +70,7 @@
 	</header>
 
 	<div class="screen-center">
-		<div class="wrap landing-main">
+		<div class="wrap landing-main" bind:this={mainEl}>
 			<p class="eyebrow">the word used to mean something else</p>
 			<h1 class="page-title">are you smarter<br />than an <span class="blood">idiot</span></h1>
 			<p class="lede">not the person who does not know. the person who is proud of it.</p>
@@ -78,7 +83,7 @@
 				<img
 					src="/images/home/stupid-thinker-900.webp"
 					srcset="/images/home/stupid-thinker-600.webp 600w, /images/home/stupid-thinker-900.webp 900w, /images/home/stupid-thinker-1366.webp 1366w"
-					sizes="(min-width: 1024px) min(46vw, 680px), min(92vw, 600px)"
+					sizes="(min-width: 1024px) min(36vw, 520px), min(92vw, 600px)"
 					width="900"
 					height="697"
 					alt=""
@@ -142,7 +147,7 @@
 		justify-content: center;
 		gap: 0.35em;
 		overflow: hidden;
-		font-size: clamp(14px, 4.2cqw, 18px);
+		font-size: clamp(12px, 3.9cqw, 28px);
 		line-height: 1.15;
 		letter-spacing: 0.04em;
 		color: var(--paper);
@@ -182,7 +187,7 @@
 			position: absolute;
 			bottom: calc(16px * var(--hero-scale, 1));
 			right: 0;
-			width: min(46vw, 680px);
+			width: min(36vw, 520px);
 			margin: 0;
 			display: block;
 		}
@@ -234,11 +239,17 @@
 	}
 
 	@media (max-width: 620px) {
-		.wordmark { font-size: clamp(1.6rem, 7vw, 2.2rem); }
-		.landing .page-title { font-size: calc(min(clamp(3.2rem, 13vw, 8rem), 20vh) * var(--hero-scale, 1)); }
+		/* Slimmer chrome on phones so the hero figure (and its anthill) fits
+		   without clipping: smaller wordmark, tighter header, minimal footer
+		   padding. */
+		.app-bar { padding-top: max(10px, env(safe-area-inset-top)); }
+		.wordmark { font-size: clamp(1.1rem, 4vw, 1.4rem); }
+		.landing .page-title { font-size: calc(min(clamp(2.5rem, 10vw, 8rem), 18vh) * var(--hero-scale, 1)); }
 		.lede { font-size: calc(1.05rem * var(--hero-scale, 1)); }
 		.actions { gap: 18px; margin-top: calc(22px * var(--hero-scale, 1)); }
 		.actions .button { flex: 1 1 100%; }
 		.actions .quiet-link { font-size: calc(1.15rem * var(--hero-scale, 1)); }
+		.landing-tease { padding: 4px 0 max(6px, env(safe-area-inset-bottom)); gap: 8px; }
+		.landing-tease b { font: clamp(1.6rem, 3.5vw, 2.4rem)/0.8 'Anton', sans-serif; }
 	}
 </style>
