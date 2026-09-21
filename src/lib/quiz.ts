@@ -5,14 +5,17 @@ import type { Question, Tier } from './types';
 export const QUIZ_LENGTH = 5;
 
 /**
- * Three levels, each with its own clock. Named in the app's dry, mean voice:
- * the harder the question, the less rope you get. `difficulty` on a Question
- * is the level key.
+ * Three levels, each with its own clock. Named in the app's dry, mean voice.
+ * `difficulty` on a Question is the level key.
+ *
+ * The clock is a flat 8s at every level. (It used to tighten with difficulty —
+ * 5/4/3 — which the landing copy still advertises; the ladder is a one-line
+ * change back if the tightening is wanted.)
  */
 export const LEVELS: Record<1 | 2 | 3, { name: string; seconds: number }> = {
-	1: { name: 'the gimme', seconds: 5 },
-	2: { name: 'the squeeze', seconds: 4 },
-	3: { name: 'the reckoning', seconds: 3 }
+	1: { name: 'the gimme', seconds: 8 },
+	2: { name: 'the squeeze', seconds: 8 },
+	3: { name: 'the reckoning', seconds: 8 }
 };
 
 export const DIFFICULTY_WEIGHTS: Record<1 | 2 | 3, number> = { 1: 3, 2: 3, 3: 2 };
