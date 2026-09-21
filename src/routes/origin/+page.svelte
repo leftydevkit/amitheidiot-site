@@ -31,6 +31,33 @@
 		markLessonSeen();
 	}
 
+	function back() {
+		if (index > 0) index -= 1;
+	}
+
+	// Touch swipe between beats: left advances, right steps back. Touch events
+	// only, so this is inert with a mouse — the tap controls remain the primary
+	// path and the gesture is purely additive.
+	let touchStart: { x: number; y: number } | null = null;
+	const SWIPE_MIN = 45;
+
+	function onTouchStart(e: TouchEvent) {
+		const t = e.changedTouches[0];
+		touchStart = { x: t.clientX, y: t.clientY };
+	}
+
+	function onTouchEnd(e: TouchEvent) {
+		if (skipped || !touchStart) return;
+		const t = e.changedTouches[0];
+		const dx = t.clientX - touchStart.x;
+		const dy = t.clientY - touchStart.y;
+		touchStart = null;
+		// Horizontal intent only: a real horizontal travel, not a mostly-vertical drag.
+		if (Math.abs(dx) < SWIPE_MIN || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+		if (dx < 0) advance();
+		else back();
+	}
+
 	// Auto-fit: shrink the copy until it fits the space above the art band, so a
 	// long beat never scrolls. em-based spacing scales with the font size.
 	let stageEl = $state<HTMLElement>();
@@ -75,7 +102,7 @@
 	/>
 </svelte:head>
 
-<main class="screen origin">
+<main class="screen origin" ontouchstart={onTouchStart} ontouchend={onTouchEnd}>
 	<div class="wrap origin-inner">
 		<header class="origin-head">
 			<a class="wordmark" href="/">am<span class="accent">i</span>the<span class="blood">idiot</span></a>
@@ -127,7 +154,7 @@
 				{#if index === lastIndex}
 					<button class="button gold" onclick={advance}>start</button>
 				{:else}
-					<button class="hint" onclick={advance}>tap to continue</button>
+					<button class="hint" onclick={advance}>swipe or tap to continue</button>
 				{/if}
 			</footer>
 		{/if}
