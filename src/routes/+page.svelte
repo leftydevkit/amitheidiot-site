@@ -85,7 +85,7 @@
 					srcset="/images/home/stupid-thinker-600.webp 600w, /images/home/stupid-thinker-900.webp 900w, /images/home/stupid-thinker-1366.webp 1366w"
 					sizes="(min-width: 1024px) min(36vw, 520px), min(92vw, 600px)"
 					width="900"
-					height="697"
+					height="535"
 					alt=""
 				/>
 				{#key thoughtIndex}
@@ -136,10 +136,10 @@
 	   figure at every width. Content comes from HERO_THOUGHT. */
 	.thought {
 		position: absolute;
-		left: 1.5%;
-		top: 1.1%;
-		width: 34.9%;
-		height: 30.3%;
+		left: 0.9%;
+		top: 1.6%;
+		width: 49.6%;
+		height: 58.1%;
 		display: flex;
 		flex-wrap: wrap;
 		align-content: center;
@@ -147,7 +147,7 @@
 		justify-content: center;
 		gap: 0.35em;
 		overflow: hidden;
-		font-size: clamp(12px, 3.9cqw, 28px);
+		font-size: clamp(13px, 4.4cqw, 30px);
 		line-height: 1.15;
 		letter-spacing: 0.04em;
 		color: var(--paper);

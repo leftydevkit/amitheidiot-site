@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Post-process the home figure ("stupid-thinker2") into a production WebP.
+# Post-process the home figure ("stupid-thinker3") into a production WebP.
 #
-# v2 is the same figure as the original teaser art with a thought bubble added
-# in the source's upper-right; after the -flop below it sits upper-left in the
-# output, which is where the page overlays the thought text (see +page.svelte).
+# v3 is the same thinker with a much larger, empty cloud thought bubble in the
+# source's upper-right; after the -flop below it sits upper-left in the output,
+# which is where the page overlays the thought text (see +page.svelte). The
+# bigger bubble gives the cycling comments room to breathe.
 #
 # The source is a white-on-dark line drawing on a solid warm-grey ground
 # (#24201F, ~14% luminance). The page ground is ink (#16130E), so the drawing
@@ -27,7 +28,7 @@ set -euo pipefail
 
 PAPER="#F1ECE0"
 
-SRC="${1:-imgs/stupid-thinker2.jpg}"
+SRC="${1:-imgs/stupid-thinker3.jpg}"
 OUT="static/images/home"
 NAME="stupid-thinker"
 mkdir -p "$OUT"
