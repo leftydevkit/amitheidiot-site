@@ -76,19 +76,28 @@
 	   so fitHero() can shrink it along with everything else instead of letting it
 	   push the page past the viewport. Mirrored and knocked out of its ground by
 	   scripts/process-home-figure.sh. */
-	.landing-main { position: relative; }
+	.landing-main {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 auto;
+		min-height: 0;
+		padding: calc(16px * var(--hero-scale, 1)) 0 0;
+	}
 	.hero-figure {
-		width: calc(min(72vw, 440px) * var(--hero-scale, 1));
-		margin: calc(22px * var(--hero-scale, 1)) auto 0;
+		width: calc(min(88vw, 560px) * var(--hero-scale, 1));
+		margin: auto auto 0;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
 		pointer-events: none;
 	}
 	.hero-figure img {
 		display: block;
 		width: 100%;
 		height: auto;
-		max-height: 34vh;
+		max-height: 46vh;
 		object-fit: contain;
-		margin-inline: auto;
 	}
 
 	/* Wide screens: the wrap is capped at 1120px and the copy only fills its left
@@ -98,12 +107,14 @@
 	   border out to the wrap edge. bottom:0 is the column's content-box bottom,
 	   flush with the button's border until .landing-main's padding pushes it past. */
 	@media (min-width: 1024px) {
+		.landing-main { display: block; flex: 0 0 auto; height: auto; padding: calc(16px * var(--hero-scale, 1)) 0; }
 		.hero-figure {
 			position: absolute;
 			bottom: calc(16px * var(--hero-scale, 1));
 			right: 0;
 			width: min(42vw, 620px);
 			margin: 0;
+			display: block;
 		}
 		.hero-figure img { max-height: 66vh; }
 	}
@@ -154,6 +165,8 @@
 	}
 
 	@media (max-width: 620px) {
+		.wordmark { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+		.landing .page-title { font-size: calc(min(clamp(3.2rem, 13vw, 8rem), 20vh) * var(--hero-scale, 1)); }
 		.lede { font-size: calc(1.05rem * var(--hero-scale, 1)); }
 		.actions { gap: 18px; margin-top: calc(22px * var(--hero-scale, 1)); }
 		.actions .button { flex: 1 1 100%; }
