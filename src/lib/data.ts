@@ -170,6 +170,18 @@ export const SKIP_LINE = 'skip →';
 export const SKIP_COPY = 'you skipped the one part that would have helped';
 export const REENTRY_LINK = "what's an idiot, actually? ↗";
 
+// Comments the home hero's thought bubble cycles through (the v2 figure art).
+// Short and dumb on purpose — the bubble is small, so keep each entry brief.
+// Lowercase to match the app voice. Change this array to change the rotation.
+export const HERO_THOUGHTS: string[] = [
+	"they're eating the dogs..",
+	"they're eating the cats..",
+	'covfefe.. what does it mean...',
+	"i'm a very stable genius",
+	'smart people hate me',
+	'stupid people love me'
+];
+
 // Image id per beat (index-aligned with LESSON_BEATS), per IMAGE-BRIEF.md §2.
 // Decorative texture — never content, always rendered alt="" / aria-hidden.
 export const BEAT_IMAGE_IDS: string[] = [

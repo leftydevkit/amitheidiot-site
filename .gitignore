@@ -26,3 +26,6 @@ vite.config.ts.timestamp-*
 # lives in static/images/ and is committed; this is what process-images.sh reads
 # to produce it, and it does not need to be in the repo or in every Docker build.
 /imgs
+
+# Playwright MCP snapshots
+.playwright-mcp/

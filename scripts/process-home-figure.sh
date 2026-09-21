@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# Post-process the home figure ("stupid-thinker") into a production WebP.
+# Post-process the home figure ("stupid-thinker2") into a production WebP.
+#
+# v2 is the same figure as the original teaser art with a thought bubble added
+# in the source's upper-right; after the -flop below it sits upper-left in the
+# output, which is where the page overlays the thought text (see +page.svelte).
 #
 # The source is a white-on-dark line drawing on a solid warm-grey ground
 # (#24201F, ~14% luminance). The page ground is ink (#16130E), so the drawing
@@ -9,9 +13,9 @@
 # (alpha first, colour last) keeps the antialiasing smooth and — because the RGB
 # is one flat colour — lets the resize step interpolate without dark fringing.
 #
-#   -flop     the source faces right (the thinker points at the anthill on his
-#             right). The figure is placed to the right of the hero copy, so it
-#             is mirrored to face the wordmark and look back into the page.
+#   -flop     the source faces right. The figure is placed to the right of the
+#             hero copy, so it is mirrored to face the wordmark and look back
+#             into the page. This also moves the thought bubble to the left.
 #   -trim     the source carries ~40% dead ground around the subject; trimmed
 #             away so the delivered width is the art's width (matches the way
 #             scripts/process-images.sh frames the origin beats).
@@ -23,7 +27,7 @@ set -euo pipefail
 
 PAPER="#F1ECE0"
 
-SRC="imgs/stupid-thinker.jpg"
+SRC="${1:-imgs/stupid-thinker2.jpg}"
 OUT="static/images/home"
 NAME="stupid-thinker"
 mkdir -p "$OUT"

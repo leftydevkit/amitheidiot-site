@@ -1,11 +1,35 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { hasSeenLesson } from '$lib/gates';
-	import { LANDING_TEASER, REENTRY_LINK } from '$lib/data';
+	import { LANDING_TEASER, REENTRY_LINK, HERO_THOUGHTS } from '$lib/data';
 
 	let seen = $state(false);
+	// The whole comment is laid out at once and each word fades in with a staggered
+	// delay (CSS below), so the bubble never reflows. This timer just advances to
+	// the next comment once the current one has fully revealed and been held.
+	let thoughtIndex = $state(0);
+	let thoughtTimer: ReturnType<typeof setTimeout> | undefined;
+
+	const WORD_STAGGER = 300; // keep in sync with the .word animation-delay
+	const WORD_FADE = 400;
+	const HOLD = 2000;
+
+	function scheduleNext() {
+		const words = HERO_THOUGHTS[thoughtIndex].split(' ');
+		const revealMs = (words.length - 1) * WORD_STAGGER + WORD_FADE;
+		thoughtTimer = setTimeout(() => {
+			thoughtIndex = (thoughtIndex + 1) % HERO_THOUGHTS.length;
+			scheduleNext();
+		}, revealMs + HOLD);
+	}
+
 	onMount(() => {
 		seen = hasSeenLesson();
+		scheduleNext();
+	});
+
+	onDestroy(() => {
+		if (thoughtTimer) clearTimeout(thoughtTimer);
 	});
 
 	// Auto-fit the hero: shrink the type until the whole page fits the viewport,
@@ -54,11 +78,18 @@
 				<img
 					src="/images/home/stupid-thinker-900.webp"
 					srcset="/images/home/stupid-thinker-600.webp 600w, /images/home/stupid-thinker-900.webp 900w, /images/home/stupid-thinker-1366.webp 1366w"
-					sizes="(min-width: 1024px) min(42vw, 620px), min(72vw, 440px)"
+					sizes="(min-width: 1024px) min(46vw, 680px), min(92vw, 600px)"
 					width="900"
-					height="638"
+					height="697"
 					alt=""
 				/>
+				{#key thoughtIndex}
+					<figcaption class="thought">
+						{#each HERO_THOUGHTS[thoughtIndex].split(' ') as word, i (i)}
+							<span class="word" style:--i="{i}">{word}</span>
+						{/each}
+					</figcaption>
+				{/key}
 			</figure>
 		</div>
 	</div>
@@ -85,12 +116,51 @@
 		padding: calc(16px * var(--hero-scale, 1)) 0 0;
 	}
 	.hero-figure {
-		width: calc(min(88vw, 560px) * var(--hero-scale, 1));
+		position: relative;
+		container-type: inline-size;
+		width: calc(min(92vw, 600px) * var(--hero-scale, 1));
 		margin: auto auto 0;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
 		pointer-events: none;
+	}
+	/* Thought-bubble text, laid over the bubble baked into the v2 art. The bubble
+	   interior sits at L1.5% T1.1% W34.9% H30.3% of the image (measured from the
+	   processed knockout), and the type is in container units so it tracks the
+	   figure at every width. Content comes from HERO_THOUGHT. */
+	.thought {
+		position: absolute;
+		left: 1.5%;
+		top: 1.1%;
+		width: 34.9%;
+		height: 30.3%;
+		display: flex;
+		flex-wrap: wrap;
+		align-content: center;
+		align-items: center;
+		justify-content: center;
+		gap: 0.35em;
+		overflow: hidden;
+		font-size: clamp(14px, 4.2cqw, 18px);
+		line-height: 1.15;
+		letter-spacing: 0.04em;
+		color: var(--paper);
+	}
+	/* All words are present from the start (so the layout is stable) and each
+	   fades in after the previous one — no movement, just opacity. The stagger
+	   must match WORD_STAGGER in the script. */
+	.word {
+		animation: word-fade 400ms ease both;
+		animation-delay: calc(var(--i) * 300ms);
+	}
+	@keyframes word-fade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 	.hero-figure img {
 		display: block;
@@ -112,14 +182,13 @@
 			position: absolute;
 			bottom: calc(16px * var(--hero-scale, 1));
 			right: 0;
-			width: min(42vw, 620px);
+			width: min(46vw, 680px);
 			margin: 0;
 			display: block;
 		}
 		.hero-figure img { max-height: 66vh; }
 	}
 
-	.landing-main { padding: calc(16px * var(--hero-scale, 1)) 0; }
 	/* line-height < 1 makes Anton's caps overflow the line box and collide with
 	   the eyebrow; the top margin buys that space back. */
 	.landing .page-title {
