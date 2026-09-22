@@ -100,8 +100,7 @@
 	</div>
 
 	<footer class="landing-tease wrap">
-		<b>35%</b>
-		<span>{LANDING_TEASER}</span>
+		<span><b>35%</b> {LANDING_TEASER}</span>
 	</footer>
 </main>
 
@@ -243,7 +242,7 @@
 		   without clipping: smaller wordmark, tighter header, minimal footer
 		   padding. */
 		.app-bar { padding-top: max(10px, env(safe-area-inset-top)); }
-		.wordmark { font-size: clamp(1.1rem, 4vw, 1.4rem); }
+		.wordmark { font-size: clamp(2.2rem, 8vw, 2.8rem); }
 		.landing .page-title { font-size: calc(min(clamp(2.5rem, 10vw, 8rem), 18vh) * var(--hero-scale, 1)); }
 		.lede { font-size: calc(1.05rem * var(--hero-scale, 1)); }
 		.actions { gap: 18px; margin-top: calc(22px * var(--hero-scale, 1)); }
