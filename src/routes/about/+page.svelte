@@ -19,12 +19,12 @@
 
 			<section class="block">
 				<h2>what this is</h2>
-				<p>five civics questions drawn from a pool of 67, across three difficulty levels — the clock tightens as it gets harder — and a story about what the word idiot used to mean. no accounts, no email, no analytics, no data leaves your browser.</p>
+				<p>a civics quiz and a mirror. pick your difficulty — the rally, the echo chamber, or not maga — and it gets longer and faster the deeper you go: five questions at twelve seconds, eight at eight, twelve at six. there is a short lesson on what the word idiot used to mean, and a wall of numbers on how little the country actually knows. it is not subtle about the point. no accounts, no email, no analytics, no data leaves your browser.</p>
 			</section>
 
 			<section class="block">
 				<h2>the questions</h2>
-				<p>all 24 questions are drawn from the public-domain u.s. citizenship and immigration services 2008 civics test, rewritten into four-choice form where the original was open-ended. the correct answer to every question is verifiable against that source document.</p>
+				<p>the bank is the public-domain u.s. citizenship and immigration services 2008 civics test — quoted verbatim, minus the few questions whose answer depends on where you live or who happens to hold office this week. the original is oral and open-ended; we made every one four-choice, with distractors of our own. the hardest level adds a further set of questions harder than the citizenship test, because that test was never the bar for citizens. every answer is verifiable against the source document.</p>
 				<a class="quiet-link" href="https://www.uscis.gov/sites/default/files/document/questions-and-answers/OoC_100_Questions_2008_Civics_Test_V1.pdf" target="_blank" rel="noopener noreferrer">uscis 2008 civics test (pdf) ↗</a>
 			</section>
 

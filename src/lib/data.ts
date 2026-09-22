@@ -179,11 +179,11 @@ export interface Beat {
 
 export const LESSON_BEATS: Beat[] = [
 	{ lines: ['idiot.', 'we have it backwards.', 'it never named the man who didn\'t know.', 'it named the man who didn\'t show up.'] },
-	{ lines: ['the idiot kept his gate shut.', 'blinds down, porch light off, nothing in the flag bracket.', 'didn\'t vote. didn\'t serve. didn\'t show up.', 'tended his own yard, and nothing else.'], emphatic: 0 },
-	{ lines: ['here\'s the part almost everyone gets wrong.', 'they did not think the idiot was stupid.', 'the idiot knew exactly what was on the agenda — could have walked you through it, in detail.', 'just didn\'t care to be there.'] },
-	{ lines: ['and the country did not find it quaint.', 'a republic runs on the people who show up — who vote, who serve, who pay attention when it\'s boring.', 'the idiot took the protection and gave nothing back.', 'that was never a personality type. that was a citizen in name only.'], emphatic: 2 },
-	{ lines: ['so the word drifted. it always does.', 'showing up got cheaper to skip — fewer meetings to sit through, fewer consequences for not knowing.', 'from the man who wouldn\'t participate, to the man who didn\'t know, to the man who plainly didn\'t care to.', 'same contempt. softer target.'] },
-	{ lines: ['which brings us to now.', 'the modern american idiot is not the citizen who doesn\'t know the answer.', 'it\'s the citizen who is certain of it, wrong about it, and completely unbothered by either fact.'], emphatic: 2 },
+	{ lines: ['the idiot kept his gate shut.', 'porch light off, flag bracket empty, curtains drawn.', 'didn\'t vote. didn\'t serve. didn\'t bother to find out.', 'tended his own yard, and nothing else.'], emphatic: 0 },
+	{ lines: ['here\'s the part almost everyone gets wrong.', 'they did not think the idiot was stupid.', 'he knew exactly what was on the agenda — could have walked you through it, in detail.', 'he just didn\'t care to be there.'], emphatic: 0 },
+	{ lines: ['and the country did not find it quaint.', 'a republic runs on the people who show up — who vote, who serve, who pay attention when it is tedious.', 'the idiot took the protection and gave nothing back.', 'that was never a personality type. that was a citizen in name only.'], emphatic: 2 },
+	{ lines: ['so the word drifted. it always does.', 'showing up got cheaper to skip — fewer meetings, fewer consequences, nobody checking.', 'from the man who wouldn\'t participate, to the man who didn\'t know, to the man who was fine not knowing.', 'a downgrade in three easy steps.'], emphatic: 2 },
+	{ lines: ['which brings us to the current model.', 'the old idiot didn\'t know, and that was forgivable — nobody is born knowing this.', 'the new one doesn\'t know, is certain he does, and gets louder the less he can prove.', 'confidence in your own ignorance used to be embarrassing. now it is the whole personality.'], emphatic: 3 },
 	{ lines: ['you\'re about to find out which one you are.'], cta: true }
 ];
 
