@@ -1,61 +1,61 @@
 import { QUESTIONS } from './data';
 import type { Question, Tier } from './types';
 
-// §9.2 — tunable numbers live here as named constants (single source of truth).
-export const QUIZ_LENGTH = 5;
-
 /**
- * Three levels, each with its own clock. Named in the app's dry, mean voice.
+ * A difficulty tier. Named in the app's dry, mean voice — MAGA-flavoured, since
+ * the whole point is to make the people who slept through civics squirm. The
+ * harder the level, the less rope per question and the more questions you owe.
  * `difficulty` on a Question is the level key.
- *
- * The clock is a flat 8s at every level. (It used to tighten with difficulty —
- * 5/4/3 — which the landing copy still advertises; the ladder is a one-line
- * change back if the tightening is wanted.)
  */
-export const LEVELS: Record<1 | 2 | 3, { name: string; seconds: number }> = {
-	1: { name: 'the gimme', seconds: 8 },
-	2: { name: 'the squeeze', seconds: 8 },
-	3: { name: 'the reckoning', seconds: 8 }
-};
-
-export const DIFFICULTY_WEIGHTS: Record<1 | 2 | 3, number> = { 1: 3, 2: 3, 3: 2 };
-
-/**
- * Draw `QUIZ_LENGTH` unique questions without replacement, weighted 3:3:2
- * across the three levels. The bank is 22×gimme / 23×squeeze / 22×reckoning,
- * so a run is broadly balanced but never the same five twice.
- */
-export function pickFiveQuestions(): Question[] {
-	const pool = [...QUESTIONS];
-	const drawn: Question[] = [];
-
-	while (drawn.length < QUIZ_LENGTH && pool.length > 0) {
-		const totalWeight = pool.reduce((sum, q) => sum + DIFFICULTY_WEIGHTS[q.difficulty], 0);
-		let r = Math.random() * totalWeight;
-		let idx = 0;
-		for (let i = 0; i < pool.length; i++) {
-			r -= DIFFICULTY_WEIGHTS[pool[i].difficulty];
-			if (r <= 0) {
-				idx = i;
-				break;
-			}
-		}
-		// Safety: if floating point leaves r > 0 through the loop, take the last.
-		if (r > 0) idx = pool.length - 1;
-
-		drawn.push(pool[idx]);
-		pool.splice(idx, 1);
-	}
-
-	return drawn;
+export interface Level {
+	name: string;
+	/** Per-question clock, in seconds. */
+	seconds: number;
+	/** Questions asked in a run at this level. */
+	count: number;
+	/** One-line pitch, shown in the difficulty selector. */
+	description: string;
 }
 
-/** §6 — tier derivation. */
-export function deriveTier(score: number): Tier {
-	if (score === 5) return 'CITIZEN';
-	if (score === 4) return 'RESIDENT';
-	if (score === 2 || score === 3) return 'IDIŌTĒS';
-	return 'IDIOT'; // score 0 or 1
+export const LEVELS: Record<1 | 2 | 3, Level> = {
+	1: {
+		name: 'the rally',
+		seconds: 12,
+		count: 5,
+		description:
+			'five questions, twelve seconds apiece. the easy ones — the things you would know if you had ever read past a headline. there is no excuse for missing any of them.'
+	},
+	2: {
+		name: 'the echo chamber',
+		seconds: 8,
+		count: 8,
+		description:
+			'eight questions, eight seconds apiece. this is where the things you "heard somewhere" start to cost you.'
+	},
+	3: {
+		name: 'not maga',
+		seconds: 6,
+		count: 12,
+		description:
+			'twelve questions, six seconds apiece. the real test, and the one most people fail: do you know it, or do you just feel like you do?'
+	}
+};
+
+/** Levels easiest-first — the order the selector lists them. */
+export const LEVEL_ORDER: (1 | 2 | 3)[] = [1, 2, 3];
+
+/** Draw `count` unique questions of a single difficulty, in random order. */
+export function pickQuestions(difficulty: 1 | 2 | 3, count: number): Question[] {
+	return shuffle(QUESTIONS.filter((q) => q.difficulty === difficulty)).slice(0, count);
+}
+
+/** §6 — tier derivation. Proportional, so it holds for any run length. */
+export function deriveTier(score: number, total: number): Tier {
+	const pct = total > 0 ? score / total : 0;
+	if (pct >= 1) return 'CITIZEN';
+	if (pct >= 0.8) return 'RESIDENT';
+	if (pct >= 0.4) return 'IDIŌTĒS';
+	return 'IDIOT';
 }
 
 /** Fisher–Yates, returns a new array (does not mutate the input). */

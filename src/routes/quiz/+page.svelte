@@ -6,7 +6,7 @@
 	import ProgressDots from '$lib/components/ProgressDots.svelte';
 	import { NO_ANSWER_LABEL, WRONG_LINES, TIMEOUT_LINES, CORRECT_LINES } from '$lib/data';
 	import type { Question, RunAnswer, RunResult } from '$lib/types';
-	import { pickFiveQuestions, shuffle, deriveTier, distinctLines, QUIZ_LENGTH, LEVELS } from '$lib/quiz';
+	import { pickQuestions, shuffle, deriveTier, distinctLines, LEVELS, LEVEL_ORDER } from '$lib/quiz';
 	import { unlockStats, recordMissed, saveLastResult, clearLastResult } from '$lib/gates';
 
 	interface PreparedQuestion {
@@ -19,6 +19,9 @@
 	let index = $state(0);
 	let questions = $state<PreparedQuestion[]>([]);
 	let answers = $state<RunAnswer[]>([]);
+	// The difficulty gate. null = the selector is showing, nothing drawn yet.
+	let selected = $state<1 | 2 | 3 | null>(null);
+	let runLength = $state(0);
 
 	// Feedback state for the just-answered question.
 	let phase = $state<'asking' | 'feedback'>('asking');
@@ -28,6 +31,7 @@
 	// Line pools tracked to avoid repeats within a run (§2.1/2.2, AC7).
 	let usedWrong = new Set<string>();
 	let usedTimeout = new Set<string>();
+	let usedCorrect = new Set<string>();
 	let questionStartedAt = $state(0);
 
 	function prepare(q: Question): PreparedQuestion {
@@ -37,10 +41,25 @@
 	}
 
 	onMount(() => {
-		clearLastResult(); // a new run is starting
-		questions = pickFiveQuestions().map(prepare);
-		questionStartedAt = performance.now();
+		clearLastResult(); // a run begins the moment a difficulty is picked
 	});
+
+	/** Begin a run at the chosen difficulty. */
+	function start(difficulty: 1 | 2 | 3) {
+		const lvl = LEVELS[difficulty];
+		runLength = lvl.count;
+		questions = pickQuestions(difficulty, lvl.count).map(prepare);
+		selected = difficulty;
+		index = 0;
+		answers = [];
+		phase = 'asking';
+		feedbackLine = '';
+		choiceStates = [];
+		usedWrong = new Set<string>();
+		usedTimeout = new Set<string>();
+		usedCorrect = new Set<string>();
+		questionStartedAt = performance.now();
+	}
 
 	const current = $derived(questions[index]);
 	const correctSoFar = $derived(answers.filter((a) => a.correct).length);
@@ -55,8 +74,9 @@
 			line = distinctLines(TIMEOUT_LINES, usedTimeout);
 			usedTimeout.add(line);
 		} else if (correct) {
-			const ordinal = Math.min(correctSoFar, CORRECT_LINES.length - 1);
-			line = CORRECT_LINES[ordinal];
+			// Runs are 5–12 questions now, so praise can't be ordinal-indexed.
+			line = distinctLines(CORRECT_LINES, usedCorrect);
+			usedCorrect.add(line);
 		} else {
 			line = distinctLines(WRONG_LINES, usedWrong);
 			usedWrong.add(line);
@@ -77,7 +97,7 @@
 
 		phase = 'feedback';
 
-		if (answers.length >= QUIZ_LENGTH) {
+		if (answers.length >= runLength) {
 			finish([...answers]);
 		}
 	}
@@ -87,7 +107,7 @@
 		const result: RunResult = {
 			answers: finalAnswers,
 			score,
-			tier: deriveTier(score),
+			tier: deriveTier(score, runLength),
 			completedAt: Date.now()
 		};
 
@@ -115,7 +135,7 @@
 	}
 
 	function next() {
-		if (answers.length >= QUIZ_LENGTH) return;
+		if (answers.length >= runLength) return;
 		index += 1;
 		phase = 'asking';
 		feedbackLine = '';
@@ -126,18 +146,35 @@
 
 <svelte:head>
 	<title>amitheidiot — the quiz</title>
-	<meta name="description" content="five questions. three levels. the clock tightens as it gets harder." />
+	<meta name="description" content="three levels. harder means more questions and less time." />
 </svelte:head>
 
 <main class="screen quiz">
 	<div class="screen-body">
 		<div class="wrap quiz-inner">
-			{#if !current}
+			{#if selected === null}
+				<div class="select">
+					<p class="eyebrow">pick your difficulty</p>
+					<h1 class="select-title">how much do you actually know?</h1>
+					<div class="levels">
+						{#each LEVEL_ORDER as d}
+							{@const lvl = LEVELS[d]}
+							<button class="level-card" class:is-hard={d === 3} onclick={() => start(d)}>
+								<span class="level-card-head">
+									<span class="level-card-name">{lvl.name}</span>
+									<span class="level-card-meta">{lvl.count} questions · {lvl.seconds}s each</span>
+								</span>
+								<span class="level-card-desc">{lvl.description}</span>
+							</button>
+						{/each}
+					</div>
+				</div>
+			{:else if !current}
 				<p class="loading">loading.</p>
 			{:else}
 				<ProgressDots
 					current={index + 1}
-					total={QUIZ_LENGTH}
+					total={runLength}
 					correct={correctSoFar}
 					attempted={answers.length}
 				/>
@@ -186,6 +223,39 @@
 		padding: max(20px, env(safe-area-inset-top)) 0 20px;
 	}
 	.loading { color: var(--paper); }
+	/* Difficulty selector — shown before a run starts. */
+	.select { display: flex; flex-direction: column; gap: 20px; }
+	.select-title {
+		font: clamp(2rem, 6vw, 3.4rem)/1 'Anton', sans-serif;
+		font-size: min(clamp(2rem, 6vw, 3.4rem), 9vh);
+		text-transform: uppercase;
+		margin: 0;
+	}
+	.levels { display: flex; flex-direction: column; gap: 14px; }
+	.level-card {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		text-align: left;
+		background: transparent;
+		color: var(--paper);
+		border: 2px solid var(--paper);
+		padding: 16px 18px;
+		transition: transform 140ms ease, box-shadow 140ms ease;
+	}
+	.level-card:hover { transform: translate(-4px, -4px); box-shadow: 5px 5px 0 var(--blue); }
+	.level-card-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+		flex-wrap: wrap;
+	}
+	.level-card-name { font: 1.9rem/1 'Anton', sans-serif; text-transform: uppercase; }
+	.level-card-meta { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.72; }
+	.level-card-desc { font-size: 1rem; line-height: 1.45; opacity: 0.9; }
+	.level-card.is-hard { border-color: var(--blood); }
+	.level-card.is-hard .level-card-name { color: var(--blood); }
 	.level-row {
 		display: flex;
 		align-items: center;

@@ -59,9 +59,9 @@
 
 <svelte:head>
 	<title>amitheidiot — civic knowledge, briefly</title>
-	<meta name="description" content="five questions. three levels. the clock tightens as it gets harder." />
+	<meta name="description" content="three levels. harder means more questions and less time." />
 	<meta property="og:title" content="amitheidiot" />
-	<meta property="og:description" content="five questions. three levels. the clock tightens as it gets harder." />
+	<meta property="og:description" content="three levels. harder means more questions and less time." />
 </svelte:head>
 
 <main class="screen landing" bind:this={pageEl}>

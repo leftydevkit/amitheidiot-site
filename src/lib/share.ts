@@ -19,7 +19,7 @@ export function buildShareText(
 	const prompt = question.prompt;
 	const correctChoice = question.choices[question.answerIndex];
 
-	// Perfect-run variant (all five correct) is handled at the results level,
+	// Perfect-run variant (all correct) is handled at the results level,
 	// not per-answer; here we cover the two non-perfect answer shapes.
 	let lines: string[];
 

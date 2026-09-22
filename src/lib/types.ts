@@ -29,8 +29,8 @@ export interface RunAnswer {
 }
 
 export interface RunResult {
-	answers: RunAnswer[]; // length 5, in the order asked
-	score: number; // 0–5
+	answers: RunAnswer[]; // one per question asked, in the order asked
+	score: number; // 0 .. answers.length
 	tier: Tier; // derived, never stored redundantly elsewhere
 	completedAt: number; // epoch ms
 }

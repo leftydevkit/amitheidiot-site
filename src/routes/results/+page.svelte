@@ -44,7 +44,7 @@
 				<section class="score-hero">
 					<p class="eyebrow">your score</p>
 					<h1 class="tier">{tier?.label ?? 'IDIOT'}</h1>
-					<p class="score-line">{score} / 5</p>
+					<p class="score-line">{score} / {result.answers.length}</p>
 					<p class="tier-desc">{tier?.description}</p>
 				</section>
 

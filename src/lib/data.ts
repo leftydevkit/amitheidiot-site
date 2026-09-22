@@ -1,11 +1,13 @@
 import type { Question, Stat, Tier } from './types';
 
 // ---------------------------------------------------------------------------
-// §3 — the question bank. Choices are written correct-first; `answerIndex` is
-// always 0 here and the app shuffles at render. Difficulty selects the level
-// clock (safe quiz.ts LEVELS): 1 = the gimme, 2 = the squeeze, 3 = the
-// reckoning. 67 items — 22 gimme / 23 squeeze / 22 reckoning — including a
-// current-events set (review those periodically; they are the ones that age).
+// §3 — the question bank. Prompts are the official USCIS civics test questions
+// (2008 version, the 100-question set) verbatim; the four-choice distractors are
+// ours. Choices are written correct-first, `answerIndex` is always 0, and the
+// app shuffles at render. Difficulty selects the level clock and length (see
+// quiz.ts LEVELS): 1 = the rally, 2 = the echo chamber, 3 = not maga. 107 items —
+// 35 / 49 / 23 — where level 3 deliberately adds questions harder than the
+// citizenship test. The `current` set ages: re-check it periodically.
 // ---------------------------------------------------------------------------
 
 const USCIS = 'https://www.uscis.gov/sites/default/files/document/questions-and-answers/OoC_100_Questions_2008_Civics_Test_V1.pdf';
@@ -13,94 +15,113 @@ const CONST = 'https://constitution.congress.gov/constitution/';
 const SCOTUS_BIO = 'https://www.supremecourt.gov/about/biographies.aspx';
 
 export const QUESTIONS: Question[] = [
-	// --- structure — the gimme -------------------------------------------------
-	{ id: 'q01-supreme-law', prompt: 'What is the supreme law of the land?', choices: ['the Constitution', 'the Declaration of Independence', 'the Bill of Rights', 'the Federalist Papers'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q06-congress-parts', prompt: 'What are the two parts of the U.S. Congress?', choices: ['the Senate and the House of Representatives', 'the House and the Cabinet', 'the Senate and the Supreme Court', 'the Executive and the Judicial'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q07-senators', prompt: 'How many U.S. Senators are there?', choices: ['100', '50', '435', '270'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q09-president-term', prompt: 'We elect a President for how many years?', choices: ['4', '6', '2', '8'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q12-commander', prompt: 'Who is the Commander in Chief of the military?', choices: ['the President', 'the Secretary of Defense', 'the Speaker of the House', 'the Chief Justice'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q14-highest-court', prompt: 'What is the highest court in the United States?', choices: ['the Supreme Court', 'the Court of Appeals', 'the Federal District Court', 'the Congressional Court'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q26-makes-laws', prompt: 'Which branch of the federal government makes the laws?', choices: ['the legislative', 'the executive', 'the judicial', 'the administrative'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q27-signs-bills', prompt: 'Who signs bills so they become law?', choices: ['the President', 'the Chief Justice', 'the Speaker of the House', 'the Attorney General'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q29-executive-head', prompt: 'Who is the head of the executive branch?', choices: ['the President', 'the Speaker of the House', 'the Chief Justice', 'the Vice President'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-	{ id: 'q35-three-branches', prompt: 'How many branches does the U.S. government have?', choices: ['3', '2', '4', '5'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
-
-	// --- structure — the squeeze ----------------------------------------------
-	{ id: 'q02-amendments', prompt: 'How many amendments does the Constitution have?', choices: ['27', '25', '10', '50'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q08-house-members', prompt: 'How many voting members does the House of Representatives have?', choices: ['435', '100', '50', '535'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q10-senator-term', prompt: 'We elect a U.S. Senator for how many years?', choices: ['6', '4', '2', '10'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q11-checks', prompt: 'What stops one branch of government from becoming too powerful?', choices: ['checks and balances', 'the electoral college', 'the Bill of Rights', 'the two-party system'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q13-succession', prompt: 'If the President can no longer serve, who becomes President?', choices: ['the Vice President', 'the Speaker of the House', 'the Chief Justice', 'the Senate Majority Leader'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q15-judicial', prompt: 'What does the judicial branch do?', choices: ['reviews and explains laws', 'writes new laws', 'signs bills into law', 'commands the military'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q25-congress-total', prompt: 'How many voting members serve in Congress in total?', choices: ['535', '435', '100', '538'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q28-cabinet', prompt: 'What does the President\u2019s Cabinet do?', choices: ['advises the President', 'writes the laws', 'judges the laws', 'elects the President'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q30-house-term', prompt: 'How long is a term for a member of the House of Representatives?', choices: ['2 years', '4 years', '6 years', '8 years'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q33-speaker-role', prompt: 'What is the role of the Speaker of the House?', choices: ['leads the House of Representatives', 'leads the Senate', 'leads the Supreme Court', 'leads the Cabinet'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
-	{ id: 'q38-term-limits', prompt: 'How many times can a person be elected President?', choices: ['twice', 'once', 'three times', 'unlimited'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 2 },
-
-	// --- structure — the reckoning --------------------------------------------
-	{ id: 'q24-justices', prompt: 'How many justices currently sit on the Supreme Court?', choices: ['9', '7', '11', '13'], answerIndex: 0, sourceUrl: SCOTUS_BIO, category: 'civics-structure', difficulty: 3 },
-	{ id: 'q31-seventeenth', prompt: 'Which amendment says U.S. Senators are elected directly by the people?', choices: ['the Seventeenth', 'the Thirteenth', 'the Nineteenth', 'the Twenty-Sixth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-17/', category: 'civics-structure', difficulty: 3 },
-	{ id: 'q32-ambassadors', prompt: 'Who represents the United States in other countries?', choices: ['ambassadors', 'governors', 'senators', 'federal judges'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 3 },
-	{ id: 'q36-line-of-succession', prompt: 'If both the President and Vice President can no longer serve, who becomes President?', choices: ['the Speaker of the House', 'the Chief Justice', 'the Senate Majority Leader', 'the Secretary of State'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 3 },
-	{ id: 'q37-president-age', prompt: 'What is the minimum age to be President?', choices: ['35', '25', '30', '40'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 3 },
-	{ id: 'q39-22nd-amendment', prompt: 'Which amendment limits a President to two terms?', choices: ['the Twenty-Second', 'the Twentieth', 'the Twenty-Fifth', 'the Twelfth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-22/', category: 'civics-structure', difficulty: 3 },
-
-	// --- rights — the gimme ----------------------------------------------------
-	{ id: 'q03-first-ten', prompt: 'What do we call the first ten amendments to the Constitution?', choices: ['the Bill of Rights', 'the Federalist Papers', 'the Articles of Confederation', 'the Emancipation Proclamation'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 1 },
-	{ id: 'q04-first-amendment', prompt: 'Name one right guaranteed by the First Amendment.', choices: ['freedom of speech', 'the right to bear arms', 'the right to a jury trial', 'the right to vote at 18'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 1 },
-	{ id: 'q43-bill-of-rights-count', prompt: 'How many amendments are in the Bill of Rights?', choices: ['10', '12', '7', '27'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 1 },
-
-	// --- rights — the squeeze --------------------------------------------------
-	{ id: 'q05-bear-arms', prompt: 'Which amendment protects the right to bear arms?', choices: ['the Second', 'the First', 'the Fourth', 'the Tenth'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 2 },
-	{ id: 'q40-13th-amendment', prompt: 'Which amendment abolished slavery?', choices: ['the Thirteenth', 'the Fourteenth', 'the Fifteenth', 'the Nineteenth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-13/', category: 'civics-rights', difficulty: 2 },
-	{ id: 'q41-19th-amendment', prompt: 'Which amendment gave women the right to vote?', choices: ['the Nineteenth', 'the Fifteenth', 'the Twenty-First', 'the Twenty-Sixth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-19/', category: 'civics-rights', difficulty: 2 },
-
-	// --- rights — the reckoning ------------------------------------------------
-	{ id: 'q42-26th-amendment', prompt: 'Which amendment gave 18-year-olds the right to vote?', choices: ['the Twenty-Sixth', 'the Nineteenth', 'the Twenty-First', 'the Twenty-Fourth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-26/', category: 'civics-rights', difficulty: 3 },
-	{ id: 'q44-4th-amendment', prompt: 'Which amendment protects against unreasonable searches and seizures?', choices: ['the Fourth', 'the First', 'the Fifth', 'the Eighth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-4/', category: 'civics-rights', difficulty: 3 },
-	{ id: 'q45-5th-amendment', prompt: 'Which amendment protects a person from being forced to incriminate themselves?', choices: ['the Fifth', 'the Fourth', 'the Sixth', 'the Seventh'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-5/', category: 'civics-rights', difficulty: 3 },
-	{ id: 'q46-6th-amendment', prompt: 'Which amendment guarantees the right to a speedy and public trial?', choices: ['the Sixth', 'the Fifth', 'the Seventh', 'the Eighth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-6/', category: 'civics-rights', difficulty: 3 },
-	{ id: 'q47-21st-amendment', prompt: 'Which amendment repealed the prohibition of alcohol?', choices: ['the Twenty-First', 'the Eighteenth', 'the Nineteenth', 'the Twenty-Second'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-21/', category: 'civics-rights', difficulty: 3 },
-	{ id: 'q48-14th-amendment', prompt: 'Which amendment guarantees equal protection under the law?', choices: ['the Fourteenth', 'the Thirteenth', 'the Fifteenth', 'the Fifth'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-14/', category: 'civics-rights', difficulty: 3 },
-
-	// --- history — the gimme ---------------------------------------------------
-	{ id: 'q16-declaration-author', prompt: 'Who wrote the Declaration of Independence?', choices: ['Thomas Jefferson', 'George Washington', 'Benjamin Franklin', 'James Madison'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
-	{ id: 'q19-civil-war', prompt: 'Name the U.S. war between the North and the South.', choices: ['the Civil War', 'the Revolutionary War', 'World War I', 'the War of 1812'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
-	{ id: 'q50-first-president', prompt: 'Who was the first President of the United States?', choices: ['George Washington', 'Thomas Jefferson', 'John Adams', 'James Madison'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
-	{ id: 'q52-we-the-people', prompt: 'Which document begins with the words \u201cWe the People\u201d?', choices: ['the Constitution', 'the Declaration of Independence', 'the Bill of Rights', 'the Gettysburg Address'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
-	{ id: 'q58-revolutionary-war', prompt: 'Which country did the United States fight in the Revolutionary War?', choices: ['Britain', 'France', 'Spain', 'Mexico'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
-
-	// --- history — the squeeze -------------------------------------------------
-	{ id: 'q17-declaration-date', prompt: 'When was the Declaration of Independence adopted?', choices: ['July 4, 1776', 'September 17, 1787', 'July 4, 1789', 'December 15, 1791'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
-	{ id: 'q20-emancipation', prompt: 'What did the Emancipation Proclamation do?', choices: ['freed slaves in the Confederate states', 'ended World War I', 'gave women the right to vote', 'created the Bill of Rights'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
-	{ id: 'q54-nixon-resigns', prompt: 'Which President resigned from office, in 1974?', choices: ['Richard Nixon', 'Lyndon Johnson', 'Gerald Ford', 'Jimmy Carter'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
-	{ id: 'q57-cold-war', prompt: 'What was the Cold War?', choices: ['a decades-long U.S.\u2013Soviet rivalry', 'a war fought in Europe', 'a trade dispute with China', 'an American civil war'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
-
-	// --- history — the reckoning ----------------------------------------------
-	{ id: 'q18-constitution-written', prompt: 'When was the Constitution written?', choices: ['1787', '1776', '1791', '1803'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 3 },
-	{ id: 'q21-louisiana', prompt: 'What territory did the United States buy from France in 1803?', choices: ['the Louisiana Territory', 'the Oregon Territory', 'the Alaska Territory', 'the Florida Territory'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 3 },
-	{ id: 'q49-marbury', prompt: 'Which Supreme Court case established the power of judicial review?', choices: ['Marbury v. Madison', 'Brown v. Board of Education', 'Dred Scott v. Sandford', 'Plessy v. Ferguson'], answerIndex: 0, sourceUrl: 'https://www.uscourts.gov/about-federal-courts/educational-resources/supreme-court-landmarks/marbury-v-madison-petitioner', category: 'history', difficulty: 3 },
-	{ id: 'q51-civil-war-end', prompt: 'In what year did the Civil War end?', choices: ['1865', '1863', '1861', '1870'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 3 },
-	{ id: 'q53-federalist-papers', prompt: 'What were the Federalist Papers?', choices: ['essays arguing for ratifying the Constitution', 'the first federal laws', 'anti-slavery pamphlets', 'the first ten amendments'], answerIndex: 0, sourceUrl: 'https://guides.loc.gov/federalist-papers', category: 'history', difficulty: 3 },
-	{ id: 'q55-first-impeachment', prompt: 'Who was the first President to be impeached?', choices: ['Andrew Johnson', 'Bill Clinton', 'Richard Nixon', 'Andrew Jackson'], answerIndex: 0, sourceUrl: 'https://www.senate.gov/about/powers-procedures/impeachment/impeachment-list.htm', category: 'history', difficulty: 3 },
-	{ id: 'q56-women-suffrage-year', prompt: 'In what year did the Nineteenth Amendment give women the vote nationwide?', choices: ['1920', '1865', '1918', '1933'], answerIndex: 0, sourceUrl: 'https://constitution.congress.gov/constitution/amendment-19/', category: 'history', difficulty: 3 },
-
-	// --- symbols & geography ---------------------------------------------------
-	{ id: 'q22-911', prompt: 'What major event happened on September 11, 2001?', choices: ['terrorists attacked the United States', 'the stock market crashed', 'the Berlin Wall fell', 'the Persian Gulf War began'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
-	{ id: 'q23-anthem', prompt: 'What is the name of the national anthem?', choices: ['The Star-Spangled Banner', 'America the Beautiful', 'God Bless America', 'My Country, \'Tis of Thee'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
-	{ id: 'q59-capital', prompt: 'What is the capital of the United States?', choices: ['Washington, D.C.', 'New York City', 'Philadelphia', 'Boston'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
-	{ id: 'q60-flag-stars', prompt: 'How many stars are on the U.S. flag?', choices: ['50', '13', '48', '52'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
-	{ id: 'q61-flag-stripes', prompt: 'What do the stripes on the U.S. flag represent?', choices: ['the original 13 colonies', 'the 50 states', 'the three branches', 'the amendments'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 2 },
-
-	// --- current events (refresh these — they are the ones that age) ----------
-	{ id: 'q62-chief-justice', prompt: 'Who is the Chief Justice of the United States?', choices: ['John Roberts', 'Clarence Thomas', 'Sonia Sotomayor', 'Elena Kagan'], answerIndex: 0, sourceUrl: SCOTUS_BIO, category: 'current', difficulty: 2 },
-	{ id: 'q64-first-black-woman-justice', prompt: 'Who was the first Black woman to serve on the Supreme Court?', choices: ['Ketanji Brown Jackson', 'Sonia Sotomayor', 'Kamala Harris', 'Thurgood Marshall'], answerIndex: 0, sourceUrl: SCOTUS_BIO, category: 'current', difficulty: 2 },
-	{ id: 'q65-us-population', prompt: 'Roughly what is the population of the United States?', choices: ['about 330 million', 'about 100 million', 'about 500 million', 'about 30 million'], answerIndex: 0, sourceUrl: 'https://www.census.gov/popclock/', category: 'current', difficulty: 2 },
-	{ id: 'q68-january-6', prompt: 'What happened at the U.S. Capitol on January 6, 2021?', choices: ['a mob attacked the Capitol', 'a fire broke out', 'a new President was sworn in', 'a treaty was signed'], answerIndex: 0, sourceUrl: 'https://www.justice.gov/usao-dc/capitol-breach-cases', category: 'current', difficulty: 2 },
-	{ id: 'q63-dobbs', prompt: 'In what year did the Supreme Court overturn Roe v. Wade?', choices: ['2022', '2018', '2020', '2024'], answerIndex: 0, sourceUrl: 'https://www.supremecourt.gov/opinions/21pdf/19-1392_6j37.pdf', category: 'current', difficulty: 3 },
-	{ id: 'q66-largest-population', prompt: 'Which country has the largest population in the world?', choices: ['India', 'China', 'the United States', 'Indonesia'], answerIndex: 0, sourceUrl: 'https://population.un.org/wpp/', category: 'current', difficulty: 3 },
-	{ id: 'q67-afghanistan', prompt: 'In what year did the United States complete its withdrawal from Afghanistan?', choices: ['2021', '2019', '2023', '2016'], answerIndex: 0, sourceUrl: 'https://www.state.gov/u-s-relations-with-afghanistan/', category: 'current', difficulty: 3 }
+	{ id: 'q01-supreme-law', prompt: 'What is the supreme law of the land?', choices: ['the Constitution', 'the Declaration of Independence', 'the Bill of Rights', 'the Articles of Confederation'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q02-constitution-purpose', prompt: 'What does the Constitution do?', choices: ['sets up the government', 'elects the President', 'collects taxes', 'declares war'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q03-self-government', prompt: 'The idea of self-government is in the first three words of the Constitution.  What are these words?', choices: ['We the People', 'All Men Are', 'United States of', 'One Nation Under'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q04-amendment', prompt: 'What is an amendment?', choices: ['a change to the Constitution', 'a new law passed by Congress', 'a Supreme Court ruling', 'a presidential order'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q05-bill-of-rights', prompt: 'What do we call the first ten amendments to the Constitution?', choices: ['the Bill of Rights', 'the Articles of Confederation', 'the Federalist Papers', 'the Declaration of Independence'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 1 },
+	{ id: 'q06-first-amendment', prompt: 'What is one right or freedom from the First Amendment?', choices: ['speech', 'the right to bear arms', 'the right to a jury trial', 'the right to vote'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 1 },
+	{ id: 'q07-amendments', prompt: 'How many amendments does the Constitution have?', choices: ['27', '25', '10', '33'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q08-declaration', prompt: 'What did the Declaration of Independence do?', choices: ['announced our independence from Great Britain', 'established the Constitution', 'ended the Civil War', 'founded the first political party'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q09-declaration-rights', prompt: 'What are two rights in the Declaration of Independence?', choices: ['life', 'voting', 'owning property', 'a fair trial'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q10-freedom-religion', prompt: 'What is freedom of religion?', choices: ['You can practice any religion, or not practice a religion.', 'You must follow the state religion.', 'Only one religion is allowed.', 'Religion is banned in public.'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 2 },
+	{ id: 'q11-economic-system', prompt: 'What is the economic system in the United States?', choices: ['capitalist economy', 'socialist economy', 'communist economy', 'feudal economy'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q12-rule-of-law', prompt: 'What is the “rule of law”?', choices: ['Everyone must follow the law.', 'Only citizens must follow the law.', 'Only the President must follow the law.', 'Laws apply only to the government.'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 3 },
+	{ id: 'q13-branch-government', prompt: 'Name one branch or part of the government.', choices: ['Congress', 'the Cabinet', 'the Supreme Court clerks', 'the Federal Reserve'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q14-checks-balances', prompt: 'What stops one branch of government from becoming too powerful?', choices: ['checks and balances', 'the electoral college', 'term limits', 'popular vote'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q15-executive-branch', prompt: 'Who is in charge of the executive branch?', choices: ['the President', 'the Chief Justice', 'the Speaker of the House', 'the Secretary of State'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q16-federal-laws', prompt: 'Who makes federal laws?', choices: ['Congress', 'the President', 'the Supreme Court', 'the states'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q17-congress-parts', prompt: 'What are the two parts of the U.S. Congress?', choices: ['the Senate and House of Representatives', 'the President and Cabinet', 'the Supreme Court and lower courts', 'the Senate and the President'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q18-senators', prompt: 'How many U.S. Senators are there?', choices: ['100', '50', '435', '200'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q19-senator-term', prompt: 'We elect a U.S. Senator for how many years?', choices: ['6', '4', '2', '8'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q21-house-members', prompt: 'The House of Representatives has how many voting members?', choices: ['435', '100', '50', '538'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q22-representative-term', prompt: 'We elect a U.S. Representative for how many years?', choices: ['2', '4', '6', '8'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q24-senator-represents', prompt: 'Who does a U.S. Senator represent?', choices: ['all people of the state', 'only the voters who elected them', 'the President', 'the federal government'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 3 },
+	{ id: 'q25-representatives-population', prompt: 'Why do some states have more Representatives than other states?', choices: ["the state's population", "the state's size", "the state's age", "the state's wealth"], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q26-president-years', prompt: 'We elect a President for how many years?', choices: ['4', '6', '2', '8'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q27-vote-month', prompt: 'In what month do we vote for President?', choices: ['November', 'January', 'March', 'August'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q30-succession', prompt: 'If the President can no longer serve, who becomes President?', choices: ['the Vice President', 'the Speaker of the House', 'the Secretary of State', 'the Chief Justice'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q31-succession-speaker', prompt: 'If both the President and the Vice President can no longer serve, who becomes President?', choices: ['the Speaker of the House', 'the Vice President', 'the Secretary of State', 'the Chief Justice'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q32-commander-in-chief', prompt: 'Who is the Commander in Chief of the military?', choices: ['the President', 'the Vice President', 'the Secretary of Defense', 'the Speaker of the House'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q33-signs-bills', prompt: 'Who signs bills to become laws?', choices: ['the President', 'the Vice President', 'the Speaker of the House', 'the Chief Justice'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q34-vetoes-bills', prompt: 'Who vetoes bills?', choices: ['the President', 'the Vice President', 'the Speaker of the House', 'the Chief Justice'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q35-cabinet', prompt: 'What does the President’s Cabinet do?', choices: ['advises the President', 'makes the laws', 'declares war', 'appoints judges'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q36-cabinet-positions', prompt: 'What are two Cabinet-level positions?', choices: ['Secretary of State', 'Speaker of the House', 'Senate Majority Leader', 'Chief Justice'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q37-judicial-branch', prompt: 'What does the judicial branch do?', choices: ['reviews laws', 'makes laws', 'enforces laws', 'signs bills'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q38-highest-court', prompt: 'What is the highest court in the United States?', choices: ['the Supreme Court', 'the Court of Appeals', 'the District Court', 'the Federal Circuit Court'], answerIndex: 0, sourceUrl: SCOTUS_BIO, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q41-federal-powers', prompt: 'Under our Constitution, some powers belong to the federal government. What is one power of the federal government?', choices: ['to print money', 'to provide schooling', 'to give driver’s licenses', 'to approve zoning'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q42-state-powers', prompt: 'Under our Constitution, some powers belong to the states. What is one power of the states?', choices: ['provide schooling and education', 'to print money', 'to declare war', 'to make treaties'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 2 },
+	{ id: 'q45-political-parties', prompt: 'What are the two major political parties in the United States?', choices: ['Democratic and Republican', 'Federalist and Whig', 'Green and Libertarian', 'Socialist and Communist'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-structure', difficulty: 1 },
+	{ id: 'q48-vote-amendments', prompt: 'There are four amendments to the Constitution about who can vote. Describe one of them.', choices: ['Citizens eighteen and older can vote', 'Citizens must own property to vote', 'Only landowners can vote', 'Citizens must pay a poll tax to vote'], answerIndex: 0, sourceUrl: CONST, category: 'civics-rights', difficulty: 2 },
+	{ id: 'q49-citizen-responsibility', prompt: 'What is one responsibility that is only for United States citizens?', choices: ['serve on a jury', 'pay taxes', 'obey the law', 'attend school'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 2 },
+	{ id: 'q50-citizen-right', prompt: 'Name one right only for United States citizens.', choices: ['vote in a federal election', 'freedom of speech', 'right to bear arms', 'right to a fair trial'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 1 },
+	{ id: 'q51-rights-everyone', prompt: 'What are two rights of everyone living in the United States?', choices: ['freedom of expression', 'freedom to vote', 'freedom to own property', 'freedom to travel abroad'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 2 },
+	{ id: 'q52-pledge-loyalty', prompt: 'What do we show loyalty to when we say the Pledge of Allegiance?', choices: ['the United States', 'the President', 'the Constitution', 'the state government'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
+	{ id: 'q53-citizen-promise', prompt: 'What is one promise you make when you become a United States citizen?', choices: ['give up loyalty to other countries', 'pay taxes every year', 'vote in every election', 'learn a second language'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 2 },
+	{ id: 'q54-vote-age', prompt: 'How old do citizens have to be to vote for President?', choices: ['18', '21', '16', '25'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 1 },
+	{ id: 'q55-participate-democracy', prompt: 'What are two ways that Americans can participate in their democracy?', choices: ['vote', 'pay income taxes', 'serve in the military', 'watch the news'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 2 },
+	{ id: 'q56-tax-deadline', prompt: 'When is the last day you can send in federal income tax forms?', choices: ['April 15', 'March 15', 'May 15', 'December 31'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 3 },
+	{ id: 'q57-selective-service', prompt: 'When must all men register for the Selective Service?', choices: ['at age 18', 'at age 21', 'at age 16', 'at age 30'], answerIndex: 0, sourceUrl: USCIS, category: 'civics-rights', difficulty: 3 },
+	{ id: 'q58-colonists-reason', prompt: 'What is one reason colonists came to America?', choices: ['freedom', 'to find gold', 'to start a monarchy', 'to escape cold weather'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q59-before-europeans', prompt: 'Who lived in America before the Europeans arrived?', choices: ['American Indians', 'the Pilgrims', 'the Vikings', 'Spanish settlers'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q60-sold-as-slaves', prompt: 'What group of people was taken to America and sold as slaves?', choices: ['Africans', 'Europeans', 'Asians', 'Native Americans'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q61-colonists-fight-british', prompt: 'Why did the colonists fight the British?', choices: ['because of high taxes', 'because they wanted a king', 'because of the French', 'because they wanted to join Spain'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q62-declaration-author', prompt: 'Who wrote the Declaration of Independence?', choices: ['Thomas Jefferson', 'George Washington', 'Benjamin Franklin', 'John Adams'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q63-declaration-date', prompt: 'When was the Declaration of Independence adopted?', choices: ['July 4, 1776', 'July 4, 1787', 'July 4, 1770', 'January 1, 1776'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q64-original-states', prompt: 'There were 13 original states. Name three.', choices: ['New Hampshire', 'Ohio', 'California', 'Texas'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q65-constitutional-convention', prompt: 'What happened at the Constitutional Convention?', choices: ['The Constitution was written.', 'The Declaration of Independence was signed.', 'The Civil War ended.', 'The Bill of Rights was abolished.'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q66-constitution-written', prompt: 'When was the Constitution written?', choices: ['1787', '1776', '1791', '1803'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q67-federalist-writer', prompt: 'The Federalist Papers supported the passage of the U.S. Constitution. Name one of the writers.', choices: ['James Madison', 'George Washington', 'Thomas Jefferson', 'Benjamin Franklin'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 3 },
+	{ id: 'q68-franklin-famous', prompt: 'What is one thing Benjamin Franklin is famous for?', choices: ['U.S. diplomat', 'first President', 'wrote the Declaration of Independence', 'invented the telephone'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q69-father-of-country', prompt: 'Who is the “Father of Our Country”?', choices: ['George Washington', 'Thomas Jefferson', 'Abraham Lincoln', 'Benjamin Franklin'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q70-first-president', prompt: 'Who was the first President?', choices: ['George Washington', 'Thomas Jefferson', 'John Adams', 'Abraham Lincoln'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q71-louisiana-purchase', prompt: 'What territory did the United States buy from France in 1803?', choices: ['the Louisiana Territory', 'the Oregon Territory', 'Alaska', 'Florida'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q72-war-1800s', prompt: 'Name one war fought by the United States in the 1800s.', choices: ['War of 1812', 'World War I', 'Korean War', 'Revolutionary War'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q73-civil-war', prompt: 'Name the U.S. war between the North and the South.', choices: ['the Civil War', 'the Revolutionary War', 'the War of 1812', 'World War I'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q74-civil-war-cause', prompt: 'Name one problem that led to the Civil War.', choices: ['slavery', 'high tariffs on tea', 'the Louisiana Purchase', 'the gold rush'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q75-lincoln-did', prompt: 'What was one important thing that Abraham Lincoln did?', choices: ['freed the slaves', 'wrote the Declaration of Independence', 'was the first President', 'purchased Alaska'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q76-emancipation', prompt: 'What did the Emancipation Proclamation do?', choices: ['freed the slaves', 'ended the Civil War', 'freed prisoners of war', 'abolished slavery everywhere'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q77-susan-anthony', prompt: 'What did Susan B. Anthony do?', choices: ["fought for women's rights", 'served as the first woman in Congress', 'founded the American Red Cross', 'wrote the Declaration of Independence'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q78-war-1900s', prompt: 'Name one war fought by the United States in the 1900s.', choices: ['World War I', 'the Civil War', 'the Revolutionary War', 'the War of 1812'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q79-wwi-president', prompt: 'Who was President during World War I?', choices: ['Woodrow Wilson', 'Franklin Roosevelt', 'Harry Truman', 'Theodore Roosevelt'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q80-wwii-president', prompt: 'Who was President during the Great Depression and World War II?', choices: ['Franklin Roosevelt', 'Woodrow Wilson', 'Harry Truman', 'Herbert Hoover'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q81-wwii-foes', prompt: 'Who did the United States fight in World War II?', choices: ['Japan, Germany, and Italy', 'China, Russia, and France', 'England, France, and Spain', 'Mexico, Canada, and Brazil'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q82-eisenhower', prompt: 'Before he was President, Eisenhower was a general. What war was he in?', choices: ['World War II', 'the Korean War', 'World War I', 'the Vietnam War'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q83-cold-war', prompt: 'During the Cold War, what was the main concern of the United States?', choices: ['Communism', 'terrorism', 'inflation', 'immigration'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 2 },
+	{ id: 'q84-civil-rights', prompt: 'What movement tried to end racial discrimination?', choices: ['civil rights movement', 'the abolition movement', 'the suffrage movement', 'the labor movement'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q85-mlk', prompt: 'What did Martin Luther King, Jr. do?', choices: ['fought for civil rights', "fought for women's rights", "fought for workers' rights", 'fought for independence from Britain'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 3 },
+	{ id: 'q86-september-11', prompt: 'What major event happened on September 11, 2001, in the United States?', choices: ['Terrorists attacked the United States', 'the stock market crashed', 'a hurricane hit New Orleans', 'the United States entered World War II'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 1 },
+	{ id: 'q87-tribe', prompt: 'Name one American Indian tribe in the United States.', choices: ['Cherokee', 'the Aztec', 'the Mayan', 'the Inca'], answerIndex: 0, sourceUrl: USCIS, category: 'history', difficulty: 3 },
+	{ id: 'q88-longest-rivers', prompt: 'Name one of the two longest rivers in the United States.', choices: ['Missouri River', 'the Colorado River', 'the Hudson River', 'the Rio Grande'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 2 },
+	{ id: 'q89-west-coast-ocean', prompt: 'What ocean is on the West Coast of the United States?', choices: ['Pacific Ocean', 'the Atlantic Ocean', 'the Indian Ocean', 'the Arctic Ocean'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
+	{ id: 'q90-east-coast-ocean', prompt: 'What ocean is on the East Coast of the United States?', choices: ['Atlantic Ocean', 'the Pacific Ocean', 'the Indian Ocean', 'the Arctic Ocean'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
+	{ id: 'q91-territory', prompt: 'Name one U.S. territory.', choices: ['Puerto Rico', 'Hawaii', 'Alaska', 'Cuba'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 2 },
+	{ id: 'q92-borders-canada', prompt: 'Name one state that borders Canada.', choices: ['Maine', 'Florida', 'Texas', 'California'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 2 },
+	{ id: 'q93-borders-mexico', prompt: 'Name one state that borders Mexico.', choices: ['California', 'Oregon', 'Nevada', 'Colorado'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 2 },
+	{ id: 'q94-capital', prompt: 'What is the capital of the United States?', choices: ['Washington, D.C.', 'New York City', 'Philadelphia', 'Boston'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
+	{ id: 'q95-statue-of-liberty', prompt: 'Where is the Statue of Liberty?', choices: ['New York Harbor', 'Boston Harbor', 'San Francisco Bay', 'the Potomac River'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
+	{ id: 'q96-flag-stripes', prompt: 'Why does the flag have 13 stripes?', choices: ['because there were 13 original colonies', 'because there were 13 presidents', 'because there were 13 amendments', 'because there were 13 wars'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 2 },
+	{ id: 'q97-flag-stars', prompt: 'Why does the flag have 50 stars?', choices: ['because there is one star for each state', 'because there are 50 presidents', 'because there are 50 amendments', 'because there were 50 original colonies'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 2 },
+	{ id: 'q98-national-anthem', prompt: 'What is the name of the national anthem?', choices: ['The Star-Spangled Banner', 'America the Beautiful', 'God Bless America', 'The Battle Hymn of the Republic'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
+	{ id: 'q99-independence-day', prompt: 'When do we celebrate Independence Day?', choices: ['July 4', 'June 14', 'September 11', 'December 25'], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 1 },
+	{ id: 'q100-national-holidays', prompt: 'Name two national U.S. holidays.', choices: ["New Year's Day and Martin Luther King, Jr. Day", 'Easter and Halloween', "Valentine's Day and St. Patrick's Day", "Groundhog Day and April Fools' Day"], answerIndex: 0, sourceUrl: USCIS, category: 'symbols-geography', difficulty: 3 },
+	{ id: 'x01-article-i', prompt: 'which branch of government does article i of the constitution establish?', choices: ['the legislative branch', 'the executive branch', 'the judicial branch', 'the federal reserve'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x02-article-ii', prompt: 'which branch of government does article ii of the constitution establish?', choices: ['the executive branch', 'the legislative branch', 'the judicial branch', 'the cabinet'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x03-article-iii', prompt: 'which branch of government does article iii of the constitution establish?', choices: ['the judicial branch', 'the executive branch', 'the legislative branch', 'the military'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x04-tenth-amendment', prompt: 'what does the tenth amendment reserve to the states and the people?', choices: ['powers not delegated to the federal government', 'the power to coin money', 'the power to declare war', 'the power to regulate interstate commerce'], answerIndex: 0, sourceUrl: CONST, category: 'civics-rights', difficulty: 3 },
+	{ id: 'x05-electoral-votes', prompt: 'how many electoral votes are there in total in the electoral college?', choices: ['538', '435', '100', '270'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x06-electoral-tie', prompt: 'what happens if no candidate wins a majority of electoral votes for president?', choices: ['the house of representatives chooses the president', 'the senate chooses the president', 'a runoff election is held', 'the supreme court chooses the president'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x07-twenty-fifth-amendment', prompt: 'what does the twenty-fifth amendment address?', choices: ['presidential succession and incapacity', 'the abolition of poll taxes', 'the direct election of senators', 'presidential term limits'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x08-twenty-second-amendment', prompt: 'what does the twenty-second amendment limit?', choices: ['the president to two terms in office', 'the number of supreme court justices', 'the size of the house of representatives', 'the length of a senate term'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x09-twenty-fourth-amendment', prompt: 'what did the twenty-fourth amendment abolish?', choices: ['poll taxes in federal elections', 'slavery', 'the military draft', 'property requirements for voting'], answerIndex: 0, sourceUrl: CONST, category: 'civics-rights', difficulty: 3 },
+	{ id: 'x10-twenty-seventh-amendment', prompt: 'what does the twenty-seventh amendment address?', choices: ['congressional pay raises', 'the electoral college', 'presidential succession', 'the right to bear arms'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x11-filibuster', prompt: 'what is a filibuster in the senate?', choices: ['an extended debate used to delay a vote', 'a vote to end debate', 'a committee hearing', 'a presidential veto'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x12-commerce-clause', prompt: 'what does the commerce clause give congress the power to regulate?', choices: ['interstate commerce', 'state elections', 'local zoning', 'public schools'], answerIndex: 0, sourceUrl: CONST, category: 'civics-structure', difficulty: 3 },
+	{ id: 'x13-habeas-corpus', prompt: 'when may habeas corpus be suspended?', choices: ['in cases of rebellion or invasion when public safety requires it', 'during any economic crisis', 'whenever congress chooses', 'during a presidential election'], answerIndex: 0, sourceUrl: CONST, category: 'civics-rights', difficulty: 3 },
+	{ id: 'x14-three-fifths', prompt: 'what did the three-fifths compromise count for purposes of representation and taxation?', choices: ['three-fifths of the enslaved population', 'three-fifths of all citizens', 'three-fifths of the states', 'three-fifths of the electoral vote'], answerIndex: 0, sourceUrl: CONST, category: 'history', difficulty: 3 },
+	{ id: 'x15-judicial-review', prompt: 'which supreme court case established the power of judicial review?', choices: ['Marbury v. Madison', 'McCulloch v. Maryland', 'Brown v. Board of Education', 'Plessy v. Ferguson'], answerIndex: 0, sourceUrl: SCOTUS_BIO, category: 'civics-structure', difficulty: 3 },
+	{ id: 'q39-scotus-count', prompt: 'How many justices are on the Supreme Court?', choices: ['9', '7', '11', '13'], answerIndex: 0, sourceUrl: SCOTUS_BIO, category: 'current', difficulty: 2 },
+	{ id: 'q40-chief-justice', prompt: 'Who is the Chief Justice of the United States now?', choices: ['John Roberts', 'Clarence Thomas', 'Samuel Alito', 'Sonia Sotomayor'], answerIndex: 0, sourceUrl: SCOTUS_BIO, category: 'current', difficulty: 2 }
 ];
 
 
@@ -167,7 +188,7 @@ export const LESSON_BEATS: Beat[] = [
 ];
 
 export const SKIP_LINE = 'skip →';
-export const SKIP_COPY = 'you skipped the one part that would have helped';
+export const SKIP_COPY = 'you skipped the one part that would have helped. you will feel it shortly';
 export const REENTRY_LINK = "what's an idiot, actually? ↗";
 
 // Comments the home hero's thought bubble cycles through (the v2 figure art).
@@ -198,61 +219,68 @@ export const BEAT_IMAGE_IDS: string[] = [
 // §2 — copy banks.
 // ---------------------------------------------------------------------------
 
-// §2.1 — wrong-answer shame lines (15).
+// §2.1 — wrong-answer shame lines. The bit is a shaming machine, so these are
+// meant to sting: confidence is the target, not the person's luck.
 export const WRONG_LINES: string[] = [
-	'you said that like you were sure',
-	'confident. also wrong',
-	'that answer had a lot of conviction behind it',
-	'you picked fast. you picked wrong',
-	'not even close, but you didn\'t hesitate',
-	'that was a guess wearing a suit',
-	'the founders did not consult you on this one',
-	'bold pick. bad pick',
+	'wrong. and you said it like it was obvious',
+	'you answered in a blink. that is the whole tell',
+	'confidence. no content. classic',
+	'wrong, fast, and certain — the full trifecta',
+	'you didn\'t think. you performed',
+	'a guess wearing a suit. again',
+	'the founders would have enjoyed watching that',
 	'you have never been more sure of anything less true',
-	'wrong, and you knew it a half-second too late',
-	'that\'s not it. it was never going to be it',
-	'you answered like the clock was the real enemy',
-	'a swing. a miss. a shrug',
-	'you\'ll defend that answer at a party tonight. don\'t',
-	'he noticed'
+	'wrong. you\'ll still argue about it tonight',
+	'not close, and you never doubted it for a second',
+	'that is the answer of someone who has never read past a headline',
+	'you swung hard at something you could not see',
+	'wrong. the certainty is what makes it sad',
+	'picked without a flicker of doubt. remarkable',
+	'you were loud about it, at least'
 ];
 
 // §2.2 — timeout lines (5).
 export const TIMEOUT_LINES: string[] = [
-	'the silence said enough',
-	'that quiet was the answer',
-	'time ran out before you did',
-	'nothing, and nothing counts',
-	'you let the clock decide. it decided against you'
+	'you froze. the clock did not',
+	'nothing. an honest answer, for once',
+	'too slow to even guess',
+	'the clock ran out while you decided whether to think',
+	'silence. it counted'
 ];
 
 export const NO_ANSWER_LABEL = 'no answer';
 
-// §2.3 — escalating correct-answer lines, by ordinal position (1st–5th).
+// §2.3 — correct-answer lines. Count-agnostic (runs are 5–12 questions now), so
+// the quiz pulls distinct ones as it goes. Even praise here has teeth.
 export const CORRECT_LINES: string[] = [
-	'correct. that one\'s easy',
-	'two right. still watching',
-	'three. you\'re doing better than most',
-	'four for four so far. huh',
-	'five for five. that\'s not luck'
+	'correct. the bar was on the floor',
+	'right. do not get used to it',
+	'yes. now do it when it is hard',
+	'correct again. suspicious',
+	'right. you will want to tell someone about that',
+	'fine. correct',
+	'that one you knew. good for you',
+	'right. the easy part is over',
+	'correct. keep going, it gets worse',
+	'right, and you were sure this time. noted'
 ];
 
-// §2.4 — tier labels and descriptions.
+// §2.4 — tier labels and descriptions. Mean on purpose.
 export const TIER_DETAILS: Record<Tier, { label: string; description: string }> = {
-	CITIZEN: { label: 'CITIZEN', description: 'you know the thing. genuinely. no notes. go be insufferable about it to a friend who scored a two.' },
-	RESIDENT: { label: 'RESIDENT', description: 'close. you clearly know how this works — you just tripped once. that happens to people who actually pay attention.' },
-	'IDIŌTĒS': { label: 'IDIŌTĒS', description: 'the original meaning. not stupid, just not here. you know some of it, and you\'ve been coasting on the rest.' },
-	IDIOT: { label: 'IDIOT', description: 'we don\'t say it lightly, and we\'re not saying it lightly now. you weren\'t unlucky. you were unbothered, and it showed.' }
+	CITIZEN: { label: 'CITIZEN', description: 'you actually know it. which puts you in a minority small enough to be embarrassing for everyone else. go be insufferable about it — you earned it.' },
+	RESIDENT: { label: 'RESIDENT', description: 'close, which is the most dangerous place to be. you knew just enough to feel sure, and you were sure, and you were wrong. fix the gap or keep being this.' },
+	'IDIŌTĒS': { label: 'IDIŌTĒS', description: 'the original word, and you have been living it — not stupid, just not here. you know some of it and coasted on the rest for years. this is the bill for that.' },
+	IDIOT: { label: 'IDIOT', description: 'you were not unlucky. you were unbothered. every one of these was free to learn and you spent that time on something dumber. this is not a verdict on your soul — it is a verdict on your attention, and it is accurate.' }
 };
 
-// §2.5 — the patriotic pep talk (identical pass or fail).
+// §2.5 — the closer. Same every run. Still the honest part — but no more soft landings.
 export const PEP_TALK: string[] = [
-	'here\'s what you were promised: a country that answers to you, not the other way around. not a king, not a priesthood of experts, not a party — a system built so the people running it work for the people living under it. that\'s the whole idea. it has never once run on autopilot.',
-	'it costs something to keep. not blood, most years — just attention. knowing which branch does what. knowing what the first amendment actually protects, so you notice when someone tells you it doesn\'t. showing up to the small, boring elections, not just the loud ones. none of it is hard. all of it is optional, which is exactly why it keeps slipping.',
-	'you didn\'t have to get a perfect score today. nobody hands you this knowledge at birth — you have to go get it, and most people don\'t, and that\'s a fixable problem, not a character flaw. it is not too late, and it is not hard. read one more thing. ask one more question. show up once more than you were planning to. that\'s the whole job. that\'s always been the whole job.'
+	'here is what you were promised: a country that answers to you. not a king, not a party, not a guy on a podcast telling you it is all rigged exactly the way you want to hear. the system does not protect you out of kindness. it protects you because enough people learned how it works and refused to stop paying attention. that is the entire mechanism, and it does not clean itself.',
+	'nobody handed you a single one of these facts. that is not the tragedy. the price of knowing them is an afternoon, and you still did not pay it. attention is the whole job — knowing which branch does what, knowing what the first amendment actually protects so you catch it when someone lies to you about it, showing up to the small elections and not just the loud ones.',
+	'you did not have to score perfectly. but this number came from a choice you made and kept making. it is fixable, and it was always fixable, and it costs less than almost anything else you did this week. the only reason it has not happened is you. read one more thing. ask one more question. stop being the person this page just described.'
 ];
 
 // §2.7 — landing teaser line. The figure renders separately (big, gold), so this
 // sentence must not repeat it.
-export const LANDING_TEASER = 'of americans can\'t name all three branches of government. the rest of the numbers are worse. see them after you play.';
+export const LANDING_TEASER = 'of americans can\'t name all three branches of government. the other numbers are worse. find out which one you are.';
 

@@ -8,7 +8,7 @@
 	let alias = $state('');
 	let copied = $state(false);
 
-	const perfect = $derived(result.score === 5);
+	const perfect = $derived(result.answers.length > 0 && result.score === result.answers.length);
 	const shareAnswer = $derived(() => {
 		const wrong = result.answers.find((a) => !a.correct);
 		return wrong ?? result.answers[0];
@@ -25,7 +25,7 @@
 
 		if (perfect) {
 			return [
-				`${name} got all five right.`,
+				`${name} got all ${result.answers.length} right.`,
 				`${name} knows what an idiot actually is, and isn't one.`,
 				'are you?'
 			].join('\n');
