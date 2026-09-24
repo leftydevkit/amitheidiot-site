@@ -3,6 +3,7 @@
 	import { loadLastResult } from '$lib/gates';
 	import { TIER_DETAILS, PEP_TALK, NO_ANSWER_LABEL, QUESTIONS } from '$lib/data';
 	import ShareCard from '$lib/components/ShareCard.svelte';
+	import ShareQr from '$lib/components/ShareQr.svelte';
 	import type { RunResult } from '$lib/types';
 
 	let result = $state<RunResult | null>(null);
@@ -13,17 +14,64 @@
 	const tier = $derived(result ? TIER_DETAILS[result.tier] : null);
 	const score = $derived(result?.score ?? 0);
 
-	// Join answer -> question for the reveal. RunResult stores questionId +
-	// choiceIndex only; the full text lives in the question bank.
+	// Publish (optional): stores the run server-side, returns a short id, and puts
+	// it on the board. Anonymous unless a name is typed. The score is recomputed
+	// server-side, so nothing here is trusted.
+	let alias = $state('');
+	let publishing = $state(false);
+	let publishedId = $state<string | null>(null);
+	let publishError = $state('');
+
+	const origin = typeof location !== 'undefined' ? location.origin : 'https://amitheidiot.com';
+	const shareUrl = $derived(publishedId ? `${origin}/r/${publishedId}` : '');
+	const canPublish = $derived(
+		!!result &&
+			[1, 2, 3].includes(result.level) &&
+			result.answers.every((a) => typeof a.choice !== 'undefined')
+	);
+
+	async function publish() {
+		if (!result || publishing) return;
+		publishing = true;
+		publishError = '';
+		try {
+			const res = await fetch('/api/runs', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({
+					alias: alias.trim() || null,
+					result: {
+						level: result.level,
+						answers: result.answers.map((a) => ({
+							questionId: a.questionId,
+							choice: a.choice ?? null,
+							timeMs: a.timeMs
+						}))
+					}
+				})
+			});
+			const body = (await res.json().catch(() => ({}))) as { id?: string; error?: string };
+			if (!res.ok || !body.id) throw new Error(body.error || 'could not publish');
+			publishedId = body.id;
+		} catch (e) {
+			publishError = e instanceof Error ? e.message : 'could not publish';
+		} finally {
+			publishing = false;
+		}
+	}
+
 	function questionFor(id: string) {
 		return QUESTIONS.find((q) => q.id === id);
 	}
 
-	function reveal(questionId: string, choiceIndex: number | null): { prompt: string; theirs: string; correct: string } {
-		const q = questionFor(questionId)!;
-		const correct = q.choices[q.answerIndex];
-		const theirs = choiceIndex === null ? NO_ANSWER_LABEL : q.choices[choiceIndex];
-		return { prompt: q.prompt, theirs, correct };
+	function reveal(questionId: string, choice: string | null) {
+		const q = questionFor(questionId);
+		if (!q) return null;
+		return {
+			prompt: q.prompt,
+			theirs: choice ?? NO_ANSWER_LABEL,
+			correct: q.choices[q.answerIndex]
+		};
 	}
 </script>
 
@@ -57,21 +105,57 @@
 				<section class="reveal">
 					<h2 class="reveal-title">the answers</h2>
 					{#each result.answers as a}
-						{@const r = reveal(a.questionId, a.choiceIndex)}
-						<div class="reveal-item" class:is-correct={a.correct}>
-							<p class="reveal-q">{r.prompt}</p>
-							<p class="reveal-theirs">you said: {r.theirs}</p>
-							{#if !a.correct}
-								<p class="reveal-correct">correct: {r.correct}</p>
-							{/if}
-						</div>
+						{@const r = reveal(a.questionId, a.choice)}
+						{#if r}
+							<div class="reveal-item" class:is-correct={a.correct}>
+								<p class="reveal-q">{r.prompt}</p>
+								<p class="reveal-theirs">you said: {r.theirs}</p>
+								{#if !a.correct}
+									<p class="reveal-correct">correct: {r.correct}</p>
+								{/if}
+							</div>
+						{/if}
 					{/each}
 				</section>
 
 				<section class="actions">
 					<a class="button gold" href="/stats">see the numbers</a>
 					<a class="button secondary" href="/learn">review what you missed</a>
+					<a class="button secondary" href="/board">the board</a>
 					<a class="button secondary" href="/quiz">play again</a>
+				</section>
+
+				<section class="publish">
+					<h2 class="publish-title">put it on the board</h2>
+					{#if publishedId}
+						<div class="published">
+							<ShareQr value={shareUrl} size={168} />
+							<div class="published-copy">
+								<p>screenshot this and send it. the code opens this exact result, and you are on the board.</p>
+								<p class="published-url">{shareUrl}</p>
+							</div>
+						</div>
+					{:else}
+						<p class="publish-lede">optional. add a name and it shows on the board — leave it blank and you stay anonymous.</p>
+						<div class="publish-row">
+							<input
+								class="alias-input"
+								type="text"
+								maxlength="24"
+								placeholder="a name (optional)"
+								bind:value={alias}
+								autocomplete="off"
+							/>
+							<button class="button" onclick={publish} disabled={publishing || !canPublish}>
+								{publishing ? 'publishing…' : 'publish this run'}
+							</button>
+						</div>
+						{#if publishError}
+							<p class="publish-err">{publishError}</p>
+						{:else if !canPublish}
+							<p class="publish-err">this run predates sharing — play again to publish it.</p>
+						{/if}
+					{/if}
 				</section>
 
 				<ShareCard {result} />
@@ -104,6 +188,27 @@
 	.reveal-theirs { margin: 0; opacity: 0.82; }
 	.reveal-correct { margin: 6px 0 0; color: var(--blue); font-weight: 700; }
 	.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+
+	.publish { margin-top: 40px; border-top: 2px solid var(--paper); padding-top: 24px; max-width: 640px; }
+	.publish-title { font: 2rem/1 'Anton', sans-serif; text-transform: uppercase; margin: 0 0 12px; }
+	.publish-lede { margin: 0 0 14px; line-height: 1.5; max-width: 560px; }
+	.publish-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: stretch; }
+	.alias-input {
+		flex: 1 1 220px;
+		background: transparent;
+		border: 2px solid var(--paper);
+		color: var(--paper);
+		font: inherit;
+		font-size: 16px; /* >=16px prevents iOS input auto-zoom */
+		min-height: 52px;
+		padding: 12px 14px;
+	}
+	.alias-input:focus { outline: 4px solid var(--gold); outline-offset: 2px; }
+	.publish-err { margin: 12px 0 0; color: var(--blood); font-weight: 700; line-height: 1.4; }
+	.published { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+	.published-copy { flex: 1 1 220px; }
+	.published-copy p { margin: 0 0 8px; line-height: 1.45; }
+	.published-url { font-size: 0.82rem; opacity: 0.72; word-break: break-all; }
 
 	@media (max-width: 620px) {
 		.actions .button { flex: 1 1 100%; }

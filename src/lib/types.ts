@@ -22,8 +22,10 @@ export interface Stat {
 
 export interface RunAnswer {
 	questionId: string;
-	/** null = timeout, displayed as "no answer". */
+	/** the option's position in the shuffled list — null = timeout. Only meaningful inside the quiz that produced it. */
 	choiceIndex: number | null;
+	/** The chosen option's text, or null for a timeout. Source of truth for review, the share card, and publishing. */
+	choice: string | null;
 	correct: boolean;
 	timeMs: number; // captured, not surfaced in v1 UI
 }
@@ -32,6 +34,8 @@ export interface RunResult {
 	answers: RunAnswer[]; // one per question asked, in the order asked
 	score: number; // 0 .. answers.length
 	tier: Tier; // derived, never stored redundantly elsewhere
+	/** the difficulty this run was played at (publishing needs it) */
+	level: 1 | 2 | 3;
 	completedAt: number; // epoch ms
 }
 

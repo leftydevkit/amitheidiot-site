@@ -22,6 +22,7 @@
 	// The difficulty gate. null = the selector is showing, nothing drawn yet.
 	let selected = $state<1 | 2 | 3 | null>(null);
 	let runLength = $state(0);
+	let playedLevel = $state<1 | 2 | 3>(1);
 
 	// Feedback state for the just-answered question.
 	let phase = $state<'asking' | 'feedback'>('asking');
@@ -48,6 +49,7 @@
 	function start(difficulty: 1 | 2 | 3) {
 		const lvl = LEVELS[difficulty];
 		runLength = lvl.count;
+		playedLevel = difficulty;
 		questions = pickQuestions(difficulty, lvl.count).map(prepare);
 		selected = difficulty;
 		index = 0;
@@ -85,6 +87,7 @@
 		answers = [...answers, {
 			questionId: current.question.id,
 			choiceIndex,
+			choice: choiceIndex === null ? null : current.shuffled[choiceIndex],
 			correct,
 			timeMs
 		}];
@@ -108,6 +111,7 @@
 			answers: finalAnswers,
 			score,
 			tier: deriveTier(score, runLength),
+			level: playedLevel,
 			completedAt: Date.now()
 		};
 

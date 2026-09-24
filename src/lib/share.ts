@@ -23,7 +23,7 @@ export function buildShareText(
 	// not per-answer; here we cover the two non-perfect answer shapes.
 	let lines: string[];
 
-	if (answer.choiceIndex === null) {
+	if (answer.choice === null) {
 		// Timeout variant.
 		lines = [
 			`${alias} said: nothing. the clock ran out.`,
@@ -31,7 +31,7 @@ export function buildShareText(
 			'the silence said enough.'
 		];
 	} else {
-		const theirChoice = question.choices[answer.choiceIndex];
+		const theirChoice = answer.choice;
 		lines = [
 			`${alias} answered: "${theirChoice}"`,
 			`correct answer: "${correctChoice}"`,

@@ -19,7 +19,13 @@
 
 			<section class="block">
 				<h2>what this is</h2>
-				<p>a civics quiz and a mirror. pick your difficulty — the rally, the echo chamber, or not maga — and it gets longer and faster the deeper you go: five questions at twelve seconds, eight at eight, twelve at six. there is a short lesson on what the word idiot used to mean, and a wall of numbers on how little the country actually knows. it is not subtle about the point. no accounts, no email, no analytics, no data leaves your browser.</p>
+				<p>a civics quiz and a mirror. pick your difficulty — the rally, the echo chamber, or not maga — and it gets longer and faster the deeper you go: five questions at twelve seconds, eight at eight, twelve at six. there is a short lesson on what the word idiot used to mean, and a wall of numbers on how little the country actually knows. it is not subtle about the point. no account, no email, no analytics — nothing about you leaves your browser unless you choose to publish a run.</p>
+			</section>
+
+			<section class="block">
+				<h2>what we store</h2>
+				<p>nothing, unless you publish a run. if you do, we keep that one result — the questions you answered, your score, the time it took, and the name you typed if you typed one — so the shared link opens and the board can rank it. no account, no email, no analytics, no IP logging.</p>
+				<p>the only cookie we set is a random string used to stop spam, and it says nothing about you. scoring is recomputed on our side from the question bank, so a published result is the result that was actually played. everything else stays on your device.</p>
 			</section>
 
 			<section class="block">
