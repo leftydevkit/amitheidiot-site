@@ -284,3 +284,7 @@ export const PEP_TALK: string[] = [
 // sentence must not repeat it.
 export const LANDING_TEASER = 'of americans can\'t name all three branches of government. the other numbers are worse. find out which one you are.';
 
+// Where abuse reports for a published result should go. Point this at a mailbox
+// you actually read — it's the only moderation path once an alias is public.
+export const REPORT_EMAIL = 'report@amitheidiot.com';
+

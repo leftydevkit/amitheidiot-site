@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { QUESTIONS, TIER_DETAILS, NO_ANSWER_LABEL } from '$lib/data';
+	import { QUESTIONS, TIER_DETAILS, NO_ANSWER_LABEL, REPORT_EMAIL } from '$lib/data';
 	import ShareQr from '$lib/components/ShareQr.svelte';
 	import type { PageData } from './$types';
 
@@ -120,6 +120,11 @@
 					{/if}
 				</div>
 			{/if}
+
+			<p class="report">
+				something abusive here?
+				<a class="quiet-link" href={`mailto:${REPORT_EMAIL}?subject=report ${run.id}`}>report this result</a>
+			</p>
 		</div>
 	</div>
 </main>
@@ -222,4 +227,5 @@
 	}
 	.remove:disabled { opacity: 0.5; cursor: default; }
 	.removed { color: var(--gold); font-weight: 700; }
+	.report { margin-top: 18px; font-size: 0.8rem; opacity: 0.6; }
 </style>

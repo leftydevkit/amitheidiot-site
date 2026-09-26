@@ -3,6 +3,7 @@ import { QUESTIONS } from '$lib/data';
 import { LEVELS, deriveTier } from '$lib/quiz';
 import type { Tier } from '$lib/types';
 import { ensureSchema, query } from './db';
+import { isBanned } from './blocklist';
 
 // Publish + read logic. `verifyPayload` is the important one: the question bank
 // is public, so a client-supplied score is trivially forgeable. We re-derive
@@ -55,15 +56,19 @@ function hashToken(token: string): string {
  * Keep the (optional) name to letters/numbers plus a little punctuation, capped.
  * Whitelisting beats blacklisting here: it kills links, markup and most abuse.
  */
-export function cleanAlias(input: unknown): string | null {
-	if (typeof input !== 'string') return null;
+export type AliasResult = { ok: true; alias: string | null } | { ok: false; error: string };
+
+export function cleanAlias(input: unknown): AliasResult {
+	if (typeof input !== 'string') return { ok: true, alias: null };
 	const s = input
 		.replace(/[^\p{L}\p{N} ._'’\-!?]/gu, '')
 		.replace(/\s+/g, ' ')
 		.trim()
 		.slice(0, ALIAS_MAX)
 		.trim();
-	return s.length >= 2 ? s : null;
+	if (s.length < 2) return { ok: true, alias: null };
+	if (isBanned(s)) return { ok: false, error: 'pick a different name' };
+	return { ok: true, alias: s };
 }
 
 /** Validate against the real bank and recompute the score server-side. */
@@ -121,6 +126,9 @@ export async function publishRun(
 	if ('error' in v) return v;
 
 	await ensureSchema();
+	const cleaned = cleanAlias(alias);
+	if (!cleaned.ok) return { error: cleaned.error };
+
 	const id = newId();
 	const deleteToken = randomBytes(16).toString('base64url');
 	await query(
@@ -132,7 +140,7 @@ export async function publishRun(
 			v.score,
 			v.total,
 			v.tier,
-			cleanAlias(alias),
+			cleaned.alias,
 			v.totalMs,
 			JSON.stringify(v.answers),
 			hashToken(deleteToken)
