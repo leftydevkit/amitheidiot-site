@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { randomBytes, createHash } from 'node:crypto';
 import { QUESTIONS } from '$lib/data';
 import { LEVELS, deriveTier } from '$lib/quiz';
 import type { Tier } from '$lib/types';
@@ -45,6 +45,10 @@ const ALIAS_MAX = 24;
 /** 8-char base64url id — the public capability to view (and rank) a run. */
 function newId(): string {
 	return randomBytes(6).toString('base64url');
+}
+
+function hashToken(token: string): string {
+	return createHash('sha256').update(token).digest('hex');
 }
 
 /**
@@ -103,21 +107,49 @@ export function verifyPayload(payload: unknown): Verified | { error: string } {
 	return { level, score, total: spec.count, tier: deriveTier(score, spec.count), totalMs, answers };
 }
 
+export interface PublishedRun {
+	id: string;
+	/** Returned once, at publish. Only its hash is stored, and it's the only way to delete the run. */
+	deleteToken: string;
+}
+
 export async function publishRun(
 	payload: unknown,
 	alias: unknown
-): Promise<{ id: string } | { error: string }> {
+): Promise<PublishedRun | { error: string }> {
 	const v = verifyPayload(payload);
 	if ('error' in v) return v;
 
 	await ensureSchema();
 	const id = newId();
+	const deleteToken = randomBytes(16).toString('base64url');
 	await query(
-		`insert into runs (id, level, score, total, tier, alias, total_ms, answers)
-		 values ($1, $2, $3, $4, $5, $6, $7, $8::jsonb)`,
-		[id, v.level, v.score, v.total, v.tier, cleanAlias(alias), v.totalMs, JSON.stringify(v.answers)]
+		`insert into runs (id, level, score, total, tier, alias, total_ms, answers, delete_token_hash)
+		 values ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9)`,
+		[
+			id,
+			v.level,
+			v.score,
+			v.total,
+			v.tier,
+			cleanAlias(alias),
+			v.totalMs,
+			JSON.stringify(v.answers),
+			hashToken(deleteToken)
+		]
 	);
-	return { id };
+	return { id, deleteToken };
+}
+
+/** Delete a run, but only with the token handed out at publish. */
+export async function deleteRun(id: string, token: string): Promise<boolean> {
+	if (!/^[A-Za-z0-9_-]{6,16}$/.test(id) || !token) return false;
+	await ensureSchema();
+	const rows = await query(
+		`delete from runs where id = $1 and delete_token_hash = $2 returning id`,
+		[id, hashToken(token)]
+	);
+	return rows.length > 0;
 }
 
 export async function getRun(id: string): Promise<PublicRun | null> {

@@ -50,9 +50,21 @@
 					}
 				})
 			});
-			const body = (await res.json().catch(() => ({}))) as { id?: string; error?: string };
+			const body = (await res.json().catch(() => ({}))) as {
+				id?: string;
+				deleteToken?: string;
+				error?: string;
+			};
 			if (!res.ok || !body.id) throw new Error(body.error || 'could not publish');
 			publishedId = body.id;
+			// The token lives only on this device; it's the only way to remove the run later.
+			if (body.deleteToken) {
+				try {
+					localStorage.setItem(`amiti_del_${body.id}`, body.deleteToken);
+				} catch {
+					/* storage blocked — the run just can't be self-deleted from here */
+				}
+			}
 		} catch (e) {
 			publishError = e instanceof Error ? e.message : 'could not publish';
 		} finally {
@@ -133,6 +145,7 @@
 							<div class="published-copy">
 								<p>screenshot this and send it. the code opens this exact result, and you are on the board.</p>
 								<p class="published-url">{shareUrl}</p>
+								<p class="published-note">keep this device — it is the only place that can remove the result later.</p>
 							</div>
 						</div>
 					{:else}
@@ -209,6 +222,7 @@
 	.published-copy { flex: 1 1 220px; }
 	.published-copy p { margin: 0 0 8px; line-height: 1.45; }
 	.published-url { font-size: 0.82rem; opacity: 0.72; word-break: break-all; }
+	.published-note { font-size: 0.82rem; opacity: 0.6; }
 
 	@media (max-width: 620px) {
 		.actions .button { flex: 1 1 100%; }

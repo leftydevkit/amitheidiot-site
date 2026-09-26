@@ -101,6 +101,7 @@
 
 	<footer class="landing-tease wrap">
 		<span><b>35%</b> {LANDING_TEASER}</span>
+		<a class="quiet-link board-link" href="/board">the board ↗</a>
 	</footer>
 </main>
 
@@ -236,6 +237,8 @@
 		color: var(--gold);
 		font: clamp(1.9rem, 4.2vw, 2.8rem)/0.8 'Anton', sans-serif;
 	}
+	.landing-tease > span { grid-column: 1 / -1; }
+	.landing-tease .board-link { grid-column: 1 / -1; justify-self: start; font-size: 0.85rem; }
 
 	@media (max-width: 620px) {
 		/* Slimmer chrome on phones so the hero figure (and its anthill) fits

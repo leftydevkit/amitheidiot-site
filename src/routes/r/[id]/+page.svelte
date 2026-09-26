@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { QUESTIONS, TIER_DETAILS, NO_ANSWER_LABEL } from '$lib/data';
 	import ShareQr from '$lib/components/ShareQr.svelte';
 	import type { PageData } from './$types';
@@ -8,6 +9,42 @@
 	const run = $derived(data.run);
 	const tier = $derived(TIER_DETAILS[run.tier]);
 	const title = $derived(`${tier?.label ?? run.tier} — ${run.score}/${run.total}`);
+
+	// The delete token only ever lives on the device that published the run, so
+	// this affordance shows for the publisher and nobody else.
+	let delToken = $state<string | null>(null);
+	let removing = $state(false);
+	let removed = $state(false);
+
+	onMount(() => {
+		try {
+			delToken = localStorage.getItem(`amiti_del_${data.run.id}`);
+		} catch {
+			delToken = null;
+		}
+	});
+
+	async function removeRun() {
+		if (!delToken || removing) return;
+		removing = true;
+		try {
+			const res = await fetch(`/api/runs/${data.run.id}/delete`, {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ token: delToken })
+			});
+			if (res.ok) {
+				try {
+					localStorage.removeItem(`amiti_del_${data.run.id}`);
+				} catch {
+					/* ignore */
+				}
+				removed = true;
+			}
+		} finally {
+			removing = false;
+		}
+	}
 
 	function reveal(questionId: string, choice: string | null) {
 		const q = QUESTIONS.find((x) => x.id === questionId);
@@ -71,6 +108,18 @@
 				<a class="button gold" href="/quiz">take the quiz</a>
 				<a class="button secondary" href="/board">the board</a>
 			</section>
+
+			{#if delToken}
+				<div class="owner">
+					{#if removed}
+						<p class="removed">gone. it is off the board.</p>
+					{:else}
+						<button class="remove" onclick={removeRun} disabled={removing}>
+							{removing ? 'removing…' : 'delete this result'}
+						</button>
+					{/if}
+				</div>
+			{/if}
 		</div>
 	</div>
 </main>
@@ -159,4 +208,18 @@
 		flex-wrap: wrap;
 		margin: 30px 0 max(24px, env(safe-area-inset-bottom));
 	}
+	.owner { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+	.remove {
+		background: none;
+		border: 2px solid var(--blood);
+		color: var(--blood);
+		padding: 9px 14px;
+		font: inherit;
+		font-size: 0.78rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+	.remove:disabled { opacity: 0.5; cursor: default; }
+	.removed { color: var(--gold); font-weight: 700; }
 </style>

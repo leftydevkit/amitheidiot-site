@@ -51,6 +51,8 @@ export function ensureSchema(): Promise<void> {
 				);
 			`);
 			await p.query(`create index if not exists runs_rank on runs (level, score, total_ms);`);
+			// Added after the first release — idempotent so existing tables get it too.
+			await p.query(`alter table runs add column if not exists delete_token_hash text;`);
 		})().catch((e) => {
 			schemaReady = null; // let the next request retry
 			throw e;
