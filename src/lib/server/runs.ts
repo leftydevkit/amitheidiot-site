@@ -60,6 +60,10 @@ export type AliasResult = { ok: true; alias: string | null } | { ok: false; erro
 
 export function cleanAlias(input: unknown): AliasResult {
 	if (typeof input !== 'string') return { ok: true, alias: null };
+	// Check the raw input as well as the cleaned one: the whitelist below strips
+	// separators, so "n@zi" would otherwise become a harmless-looking "nzi" and
+	// slip past the blocklist entirely.
+	if (isBanned(input)) return { ok: false, error: 'pick a different name' };
 	const s = input
 		.replace(/[^\p{L}\p{N} ._'’\-!?]/gu, '')
 		.replace(/\s+/g, ' ')
