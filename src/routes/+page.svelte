@@ -37,15 +37,28 @@
 	let pageEl = $state<HTMLElement>();
 	let mainEl = $state<HTMLElement>();
 
+	/**
+	 * Two failure modes, because the layout differs by width:
+	 *  - narrow: .landing-main fills the centred region, so its own content
+	 *    overflows it and scrollHeight grows;
+	 *  - wide: it is content-height and centred, so it overflows its *parent*
+	 *    instead, and on a short window the centred block rides up under the
+	 *    header and collides with the wordmark. That never shows up as
+	 *    scrollHeight, so the header line is checked directly too.
+	 */
+	function overflowed(el: HTMLElement): boolean {
+		if (el.scrollHeight > el.clientHeight + 1) return true;
+		const bar = pageEl?.querySelector('.app-bar');
+		if (!bar) return false;
+		return el.getBoundingClientRect().top < bar.getBoundingClientRect().bottom - 0.5;
+	}
+
 	function fitHero() {
-		// The hero overflows inside .landing-main (the figure hangs below it), not
-		// on <main>, so measure the inner block — otherwise nothing shrinks and the
-		// figure (and its anthill) clips on short phones.
 		const el = mainEl ?? pageEl;
 		if (!el) return;
 		let scale = 1;
 		el.style.setProperty('--hero-scale', '1');
-		while (scale > 0.55 && el.scrollHeight > el.clientHeight + 1) {
+		while (scale > 0.55 && overflowed(el)) {
 			scale = Math.round((scale - 0.03) * 100) / 100;
 			el.style.setProperty('--hero-scale', String(scale));
 		}
@@ -54,6 +67,9 @@
 	$effect(() => {
 		void seen;
 		fitHero();
+		const onResize = () => fitHero();
+		window.addEventListener('resize', onResize);
+		return () => window.removeEventListener('resize', onResize);
 	});
 </script>
 
