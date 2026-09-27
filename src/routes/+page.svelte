@@ -56,11 +56,15 @@
 	function fitHero() {
 		const el = mainEl ?? pageEl;
 		if (!el) return;
+		// Set the knob on the .screen, not .landing-main, so the footer inherits it
+		// too: on a short window the footer's big numeral is the least important
+		// thing on the page, so it should yield before the hero type gets tiny.
+		const target = pageEl ?? el;
 		let scale = 1;
-		el.style.setProperty('--hero-scale', '1');
-		while (scale > 0.55 && overflowed(el)) {
+		target.style.setProperty('--hero-scale', '1');
+		while (scale > 0.45 && overflowed(el)) {
 			scale = Math.round((scale - 0.03) * 100) / 100;
-			el.style.setProperty('--hero-scale', String(scale));
+			target.style.setProperty('--hero-scale', String(scale));
 		}
 	}
 
@@ -242,19 +246,19 @@
 		flex: 0 0 auto;
 		display: grid;
 		grid-template-columns: auto 1fr;
-		gap: 16px;
+		gap: calc(16px * var(--hero-scale, 1));
 		align-items: baseline;
 		border-top: 2px solid var(--paper);
-		padding: 14px 0 max(18px, env(safe-area-inset-bottom));
-		font-size: 0.85rem;
+		padding: calc(14px * var(--hero-scale, 1)) 0 max(18px, env(safe-area-inset-bottom));
+		font-size: calc(0.85rem * var(--hero-scale, 1));
 		line-height: 1.35;
 	}
 	.landing-tease b {
 		color: var(--gold);
-		font: clamp(1.9rem, 4.2vw, 2.8rem)/0.8 'Anton', sans-serif;
+		font: calc(clamp(1.9rem, 4.2vw, 2.8rem) * var(--hero-scale, 1))/0.8 'Anton', sans-serif;
 	}
 	.landing-tease > span { grid-column: 1 / -1; }
-	.landing-tease .board-link { grid-column: 1 / -1; justify-self: start; font-size: 0.85rem; }
+	.landing-tease .board-link { grid-column: 1 / -1; justify-self: start; font-size: calc(0.85rem * var(--hero-scale, 1)); }
 
 	@media (max-width: 620px) {
 		/* Slimmer chrome on phones so the hero figure (and its anthill) fits
@@ -267,7 +271,7 @@
 		.actions { gap: 18px; margin-top: calc(22px * var(--hero-scale, 1)); }
 		.actions .button { flex: 1 1 100%; }
 		.actions .quiet-link { font-size: calc(1.15rem * var(--hero-scale, 1)); }
-		.landing-tease { padding: 4px 0 max(6px, env(safe-area-inset-bottom)); gap: 8px; }
-		.landing-tease b { font: clamp(1.6rem, 3.5vw, 2.4rem)/0.8 'Anton', sans-serif; }
+		.landing-tease { padding: 4px 0 max(6px, env(safe-area-inset-bottom)); gap: calc(8px * var(--hero-scale, 1)); }
+		.landing-tease b { font: calc(clamp(1.6rem, 3.5vw, 2.4rem) * var(--hero-scale, 1))/0.8 'Anton', sans-serif; }
 	}
 </style>
