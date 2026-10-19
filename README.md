@@ -13,6 +13,21 @@ A civic-knowledge quiz wrapped in a story about what "idiot" used to mean. Zero 
 - `/stats` — the wall, locked until a run completes
 - `/learn` — re-teach the questions you missed
 - `/about` — sources, method, last-reviewed date, disclaimer
+- `/admin` — every published run, every answer (needs `ADMIN_KEY`)
+- `GET /api/runs/<key>` — JSON for one run (what `/r/<key>` renders, plus a
+  per-answer `correct` flag for consumers like the stream alert)
+
+## Admin
+
+Set `ADMIN_KEY` in the server environment (docker/railway/whatever runs this)
+and redeploy. `/admin` asks for it once, then shows every published run newest
+first — filterable by level and by alias/key — with each answer (their choice,
+the correct one, the timing) and a **hardest questions** table.
+
+- The cookie lasts 12 hours; **lock** clears it.
+- The page is `noindex` and is not linked from anywhere.
+- With `ADMIN_KEY` unset, `/admin` renders a "not configured" note instead of
+  the key form.
 
 ## Develop
 

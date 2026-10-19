@@ -175,6 +175,23 @@ export async function getRun(id: string): Promise<PublicRun | null> {
 	return rows[0] ?? null;
 }
 
+/**
+ * Every published run, newest first — the operator's view, not the board's.
+ * Bounded: this is read by a human page, and an unbounded table would turn a
+ * busy day into a multi-megabyte response.
+ */
+export async function listRuns(limit = 300): Promise<PublicRun[]> {
+	const n = Math.max(1, Math.min(1000, Math.floor(limit)));
+	await ensureSchema();
+	return query<PublicRun>(
+		`select id, alias, level, score, total, tier, total_ms, created_at, answers
+		   from runs
+		  order by created_at desc
+		  limit $1`,
+		[n]
+	);
+}
+
 /** Leaderboard: accuracy first, then speed, then who got there earliest. */
 export async function getBoard(level: 1 | 2 | 3 | 'all', limit = 50): Promise<BoardRow[]> {
 	await ensureSchema();
