@@ -1,35 +1,22 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import { hasSeenLesson } from '$lib/gates';
-	import { LANDING_TEASER, REENTRY_LINK, HERO_THOUGHTS } from '$lib/data';
+	import { LANDING_TEASER, REENTRY_LINK } from '$lib/data';
 
 	let seen = $state(false);
-	// The whole comment is laid out at once and each word fades in with a staggered
-	// delay (CSS below), so the bubble never reflows. This timer just advances to
-	// the next comment once the current one has fully revealed and been held.
-	let thoughtIndex = $state(0);
-	let thoughtTimer: ReturnType<typeof setTimeout> | undefined;
 
-	const WORD_STAGGER = 300; // keep in sync with the .word animation-delay
-	const WORD_FADE = 400;
-	const HOLD = 2000;
-
-	function scheduleNext() {
-		const words = HERO_THOUGHTS[thoughtIndex].split(' ');
-		const revealMs = (words.length - 1) * WORD_STAGGER + WORD_FADE;
-		thoughtTimer = setTimeout(() => {
-			thoughtIndex = (thoughtIndex + 1) % HERO_THOUGHTS.length;
-			scheduleNext();
-		}, revealMs + HOLD);
+	// The hero clip plays at half speed for the joke's slow delivery. Set it again
+	// on loadedmetadata too, because autoplay can start late.
+	let videoEl = $state<HTMLVideoElement>();
+	function slowVideo() {
+		if (videoEl) videoEl.playbackRate = 0.5;
 	}
+	$effect(() => {
+		if (videoEl) videoEl.playbackRate = 0.5;
+	});
 
 	onMount(() => {
 		seen = hasSeenLesson();
-		scheduleNext();
-	});
-
-	onDestroy(() => {
-		if (thoughtTimer) clearTimeout(thoughtTimer);
 	});
 
 	// Auto-fit the hero: shrink the type until the whole page fits the viewport,
@@ -100,21 +87,17 @@
 			</div>
 
 			<figure class="hero-figure" aria-hidden="true">
-				<img
-					src="/images/home/stupid-thinker-900.webp"
-					srcset="/images/home/stupid-thinker-600.webp 600w, /images/home/stupid-thinker-900.webp 900w, /images/home/stupid-thinker-1366.webp 1366w"
-					sizes="(min-width: 1024px) min(36vw, 520px), min(92vw, 600px)"
-					width="900"
-					height="535"
-					alt=""
-				/>
-				{#key thoughtIndex}
-					<figcaption class="thought">
-						{#each HERO_THOUGHTS[thoughtIndex].split(' ') as word, i (i)}
-							<span class="word" style:--i="{i}">{word}</span>
-						{/each}
-					</figcaption>
-				{/key}
+				<video
+					bind:this={videoEl}
+					src="/video/stupid-thinker.mp4"
+					poster="/images/home/stupid-thinker-900.webp"
+					autoplay
+					muted
+					loop
+					playsinline
+					preload="metadata"
+					onloadedmetadata={slowVideo}
+				></video>
 			</figure>
 		</div>
 	</div>
@@ -130,8 +113,9 @@
 	   screens have no dead space beside the copy, so it sits in the flow, centered
 	   under the copy block. It is scaled by --hero-scale — same knob as the type —
 	   so fitHero() can shrink it along with everything else instead of letting it
-	   push the page past the viewport. Mirrored and knocked out of its ground by
-	   scripts/process-home-figure.sh. */
+	   push the page past the viewport. The poster is generated from the clip's
+	   first frame (scripts/process-home-figure.sh), so the hand-off shares
+	   orientation, aspect and framing — no flip, no resize mid-load. */
 	.landing-main {
 		position: relative;
 		display: flex;
@@ -142,7 +126,6 @@
 	}
 	.hero-figure {
 		position: relative;
-		container-type: inline-size;
 		width: calc(min(92vw, 600px) * var(--hero-scale, 1));
 		margin: auto auto 0;
 		display: flex;
@@ -150,49 +133,14 @@
 		justify-content: center;
 		pointer-events: none;
 	}
-	/* Thought-bubble text, laid over the bubble baked into the v2 art. The bubble
-	   interior sits at L1.5% T1.1% W34.9% H30.3% of the image (measured from the
-	   processed knockout), and the type is in container units so it tracks the
-	   figure at every width. Content comes from HERO_THOUGHT. */
-	.thought {
-		position: absolute;
-		left: 0.9%;
-		top: 1.6%;
-		width: 49.6%;
-		height: 58.1%;
-		display: flex;
-		flex-wrap: wrap;
-		align-content: center;
-		align-items: center;
-		justify-content: center;
-		gap: 0.35em;
-		overflow: hidden;
-		font-size: clamp(13px, 4.4cqw, 30px);
-		line-height: 1.15;
-		letter-spacing: 0.04em;
-		color: var(--paper);
-	}
-	/* All words are present from the start (so the layout is stable) and each
-	   fades in after the previous one — no movement, just opacity. The stagger
-	   must match WORD_STAGGER in the script. */
-	.word {
-		animation: word-fade 400ms ease both;
-		animation-delay: calc(var(--i) * 300ms);
-	}
-	@keyframes word-fade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-	.hero-figure img {
+	.hero-figure video {
 		display: block;
 		width: 100%;
 		height: auto;
 		max-height: 46vh;
 		object-fit: contain;
+		mix-blend-mode: screen; /* the clip's black ground drops into the ink */
+		filter: contrast(1.6) brightness(1.08); /* crush the near-black so the box disappears */
 	}
 
 	/* Wide screens: the wrap is capped at 1120px and the copy only fills its left
@@ -211,7 +159,7 @@
 			margin: 0;
 			display: block;
 		}
-		.hero-figure img { max-height: 66vh; }
+		.hero-figure video { max-height: 66vh; }
 	}
 
 	/* line-height < 1 makes Anton's caps overflow the line box and collide with
